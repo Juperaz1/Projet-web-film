@@ -12,20 +12,20 @@ RUN curl -sS https://getcomposer.org/installer \
 # Enable Apache modules
 RUN a2enmod rewrite headers
 
-# Configure Apache for Symfony
-RUN echo '<VirtualHost *:80>
-    ServerName localhost
-    DocumentRoot /var/www/app/public
-    
-    <Directory /var/www/app/public>
-        AllowOverride All
-        Require all granted
-        DirectoryIndex index.php
-        FallbackResource /index.php
-    </Directory>
-    
-    ErrorLog /var/log/apache2/error.log
-    CustomLog /var/log/apache2/access.log combined
+# Configure Apache for Symfony - CORRECTION
+RUN echo '<VirtualHost *:80>\n\
+    ServerName localhost\n\
+    DocumentRoot /var/www/app/public\n\
+    \n\
+    <Directory /var/www/app/public>\n\
+        AllowOverride All\n\
+        Require all granted\n\
+        DirectoryIndex index.php\n\
+        FallbackResource /index.php\n\
+    </Directory>\n\
+    \n\
+    ErrorLog /var/log/apache2/error.log\n\
+    CustomLog /var/log/apache2/access.log combined\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
 WORKDIR /var/www/app
