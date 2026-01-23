@@ -1,0 +1,342 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.9), rgba(26, 32, 44, 0.9)),
+                        url('https://via.placeholder.com/1920x600/0a0a0a/667eea?text=Cinéma+Noir');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 8rem 0;
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 60%, rgba(102, 126, 234, 0.1));
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #a0aec0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #a0aec0;
+            margin-bottom: 2rem;
+        }
+        
+        .movie-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            height: 450px;
+            background: rgba(20, 20, 20, 0.8);
+        }
+        
+        .movie-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .movie-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .movie-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+            padding: 2rem;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .movie-card:hover .movie-overlay {
+            transform: translateY(0);
+        }
+        
+        .price-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+        
+        .rating i {
+            color: #f6ad55;
+            margin-right: 2px;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .cart-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(30, 30, 30, 0.95);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            color: white;
+            max-width: 300px;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+        
+        .newsletter-card {
+            background: linear-gradient(135deg, rgba(26, 32, 44, 0.9), rgba(10, 10, 10, 0.9));
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .newsletter-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <section class="hero-section">
+        <div class="container position-relative">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="hero-title">{{ title }}</h1>
+                    <p class="hero-subtitle">{{ message }}</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-play me-2"></i>Commencer
+                        </a>
+                        <a href="#" class="btn btn-outline-light btn-lg px-5">
+                            <i class="fas fa-info-circle me-2"></i>En savoir plus
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container mb-5">
+        <div class="row">
+            <div class="col-12 mb-5">
+                <h2 class="section-title fw-bold">Pourquoi choisir SiteFilm ?</h2>
+                <p class="text-muted fs-5">La meilleure expérience cinéma à la maison</p>
+            </div>
+            
+            {% for feature in features %}
+            <div class="col-md-3 mb-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">{{ feature }}</h5>
+                        <p class="card-text text-muted">
+                            Profitez d'une expérience unique avec nos fonctionnalités premium.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="container mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-title fw-bold">Films populaires</h2>
+            <a href="#" class="btn btn-outline-primary">Voir tous <i class="fas fa-arrow-right ms-2"></i></a>
+        </div>
+        
+        <div class="row">
+            {% for movie in popularMovies %}
+            <div class="col-md-3 mb-4">
+                <div class="movie-card">
+                    <img src="{{ movie.image }}" alt="{{ movie.title }}">
+                    <div class="price-tag">{{ movie.price }}€</div>
+                    <div class="movie-overlay">
+                        <h5 class="fw-bold">{{ movie.title }}</h5>
+                        <p class="mb-2 text-muted">{{ movie.genre }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="rating">
+                                {% for i in 1..5 %}
+                                    {% if i <= movie.rating %}
+                                        <i class="fas fa-star"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <button class="btn btn-sm btn-primary add-to-cart" 
+                                    data-movie="{{ movie.title }}"
+                                    data-price="{{ movie.price }}">
+                                <i class="fas fa-cart-plus"></i> Ajouter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="container mb-5">
+        <h2 class="section-title fw-bold mb-4">Catégories</h2>
+        <div class="row g-3">
+            {% for category in ['Action', 'Drame', 'Comédie', 'Science-Fiction', 'Horreur', 'Romance', 'Documentaire', 'Animation'] %}
+            <div class="col-md-3">
+                <a href="#" class="card text-decoration-none">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <div style="width: 50px; height: 50px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-video" style="color: #667eea;"></i>
+                            </div>
+                        </div>
+                        <h6 class="fw-bold mb-0">{{ category }}</h6>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="container mb-5">
+        <div class="card newsletter-card">
+            <div class="card-body p-5 position-relative">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h3 class="fw-bold mb-3">Restez informé</h3>
+                        <p class="text-muted">Recevez les dernières nouveautés et offres spéciales directement dans votre boîte mail.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <form class="d-flex">
+                            <input type="email" class="form-control me-2" placeholder="Votre email">
+                            <button type="submit" class="btn btn-primary">
+                                S'abonner <i class="fas fa-paper-plane ms-2"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="cartNotification" class="cart-notification">
+        <i class="fas fa-check-circle me-2" style="color: #38a169;"></i>
+        <span id="notificationText">Produit ajouté au panier</span>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const movieTitle = this.getAttribute('data-movie');
+                const moviePrice = this.getAttribute('data-price');
+                
+                const originalHTML = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check"></i> Ajouté';
+                this.classList.remove('btn-primary');
+                this.classList.add('btn-success');
+                
+                const cartBadge = document.querySelector('.badge');
+                let currentCount = parseInt(cartBadge.textContent);
+                cartBadge.textContent = currentCount + 1;
+                
+                const notification = document.getElementById('cartNotification');
+                const notificationText = document.getElementById('notificationText');
+                notificationText.textContent = `${movieTitle} ajouté au panier - ${moviePrice}€`;
+                notification.style.display = 'block';
+                
+                cartBadge.style.transform = 'scale(1.5)';
+                setTimeout(() => {
+                    cartBadge.style.transform = 'scale(1)';
+                }, 300);
+                
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+                
+                setTimeout(() => {
+                    this.innerHTML = originalHTML;
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-primary');
+                }, 2000);
+            });
+        });
+    </script>
+{% endblock %}

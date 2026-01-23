@@ -1,0 +1,9 @@
+app_home:
+    path: /
+    controller: App\Controller\HomeController::index
+    methods: GET
+
+# Ou pour importer toutes les routes du contrÃ´leur
+#app_controllers:
+#    resource: ../../src/Controller/
+#    type: attribute
