@@ -13,41 +13,27 @@ class HomeController extends AbstractController
     {
         return $this->render('home/index.html.twig', [
             'title' => 'SiteFilm - Votre cinéma en ligne',
-            'message' => 'Des milliers de films et séries à portée de clic',
-            'features' => [
-                'Films illimités',
-                'Notes et avis',
-                'Liste de favoris',
-                'Location & Achat'
-            ],
             'popularMovies' => [
                 [
                     'title' => 'Inception',
-                    'genre' => 'Sci-Fi/Thriller',
-                    'price' => 4.99,
+                    'genre' => 'Science-Fiction',
+                    'price' => 3.99,
                     'rating' => 4,
-                    'image' => 'https://via.placeholder.com/300x450/1a202c/667eea?text=Inception'
+                    'image' => 'https://fr.web.img6.acsta.net/c_310_420/medias/nmedia/18/72/34/14/19476654.jpg'
                 ],
                 [
-                    'title' => 'The Dark Knight',
-                    'genre' => 'Action',
-                    'price' => 3.99,
+                    'title' => 'Le Parrain',
+                    'genre' => 'Drame',
+                    'price' => 2.99,
                     'rating' => 5,
-                    'image' => 'https://via.placeholder.com/300x450/1a202c/764ba2?text=Dark+Knight'
+                    'image' => 'https://fr.web.img6.acsta.net/c_310_420/pictures/22/01/14/08/39/1848157.jpg'
                 ],
                 [
                     'title' => 'Interstellar',
-                    'genre' => 'Sci-Fi/Drame',
-                    'price' => 5.99,
+                    'genre' => 'Science-Fiction',
+                    'price' => 4.50,
                     'rating' => 4,
-                    'image' => 'https://via.placeholder.com/300x450/1a202c/4299e1?text=Interstellar'
-                ],
-                [
-                    'title' => 'Pulp Fiction',
-                    'genre' => 'Crime/Drame',
-                    'price' => 2.99,
-                    'rating' => 4,
-                    'image' => 'https://via.placeholder.com/300x450/1a202c/ed64a6?text=Pulp+Fiction'
+                    'image' => 'https://fr.web.img5.acsta.net/c_310_420/pictures/14/09/24/12/08/158828.jpg'
                 ]
             ]
         ]);

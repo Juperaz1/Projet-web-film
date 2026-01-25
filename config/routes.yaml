@@ -7,7 +7,11 @@
 # To list all registered routes, run the following command:
 #   bin/console debug:router
 
-# config/routes.yaml
+app_movies:
+    path: /films
+    controller: App\Controller\MovieController::index
+    methods: GET
+
 controllers:
-    resource: '../src/Controller/'
+    resource: ../src/Controller/
     type: attribute
