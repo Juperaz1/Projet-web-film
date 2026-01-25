@@ -6,7 +6,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        /* Header de la bibliothèque */
+        /* Styles existants inchangés */
         .library-header {
             background: linear-gradient(135deg, rgba(10, 10, 10, 0.95), rgba(26, 32, 44, 0.95));
             color: white;
@@ -24,7 +24,6 @@
             background-clip: text;
         }
         
-        /* Filtres et recherche */
         .filters-section {
             background: rgba(26, 32, 44, 0.8);
             padding: 1.5rem;
@@ -33,7 +32,6 @@
             border: 1px solid rgba(102, 126, 234, 0.2);
         }
         
-        /* Carte de film */
         .film-card {
             background: rgba(20, 20, 20, 0.9);
             border-radius: 12px;
@@ -116,7 +114,6 @@
             color: #48bb78;
         }
         
-        /* Stats */
         .stats-card {
             background: linear-gradient(135deg, rgba(26, 32, 44, 0.9), rgba(10, 10, 10, 0.9));
             border: 1px solid rgba(102, 126, 234, 0.2);
@@ -125,16 +122,6 @@
             margin-bottom: 2rem;
         }
         
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        /* Responsive */
         @media (max-width: 768px) {
             .library-header h1 {
                 font-size: 2.2rem;
@@ -144,22 +131,40 @@
                 height: 250px;
             }
         }
+        
+        /* Nouveau : badge pour genres multiples */
+        .genre-badge {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
     </style>
 {% endblock %}
 
 {% block body %}
+    <!-- Header de la bibliothèque -->
     <section class="library-header">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <h1>{{ title }}</h1>
                     <p class="lead mb-4">Découvrez notre collection complète de {{ totalFilms }} films</p>
+                    {% if message %}
+                        <div class="alert alert-warning">{{ message }}</div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </section>
 
     <div class="container">
+        <!-- Filtres et recherche -->
         <section class="filters-section">
             <form method="get" class="row align-items-center">
                 <div class="col-md-6">
@@ -194,29 +199,41 @@
             </form>
         </section>
 
+        <!-- Liste des films -->
         <div class="row" id="moviesContainer">
             {% if films|length > 0 %}
                 {% for film in films %}
-                <div class="col-xl-3 col-lg-4 col-md-6 mb-4" data-genre="{{ film.genre }}">
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                     <div class="film-card h-100">
                         {% if film.est_nouveau %}
                         <div class="film-badge">NOUVEAU</div>
                         {% endif %}
                         
+                        {% if film.est_populaire %}
+                        <div class="film-badge" style="top: 50px; background: linear-gradient(135deg, #e53e3e, #c53030);">
+                            POPULAIRE
+                        </div>
+                        {% endif %}
+                        
                         <div class="film-poster">
-                            {% if film.chemin_affiche starts with 'http' %}
-                                <img src="{{ film.chemin_affiche }}" alt="{{ film.titre }}" class="img-fluid">
-                            {% else %}
-                                <i class="fas fa-film"></i>
-                            {% endif %}
+                            <img src="{{ film.chemin_affiche }}" alt="{{ film.titre }}" class="img-fluid">
                         </div>
                         
                         <div class="film-content">
                             <h3 class="film-title">{{ film.titre }}</h3>
                             <div class="film-meta">
                                 <span>{{ film.annee }}</span> • 
-                                <span>{{ film.duree }}</span> • 
-                                <span>{{ film.genre }}</span>
+                                <span>{{ film.duree }}</span>
+                            </div>
+                            
+                            <!-- Affichage des genres multiples -->
+                            <div class="mb-2">
+                                {% set film_genres = film.genre|split(', ') %}
+                                {% for genre in film_genres %}
+                                    {% if genre != 'Non spécifié' %}
+                                        <span class="genre-badge">{{ genre }}</span>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                             
                             <div class="film-rating">
@@ -242,7 +259,8 @@
                                     </button>
                                     <button class="btn btn-sm btn-success add-to-cart"
                                             data-film="{{ film.titre }}"
-                                            data-price="{{ film.prix_location_par_default }}">
+                                            data-price="{{ film.prix_location_par_default }}"
+                                            data-film-id="{{ film.id }}">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
                                 </div>
@@ -250,6 +268,7 @@
                         </div>
                     </div>
                     
+                    <!-- Modal pour plus d'infos -->
                     <div class="modal fade" id="filmModal{{ film.id }}" tabindex="-1">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content bg-dark text-white">
@@ -261,18 +280,34 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="film-poster mb-3">
-                                                {% if film.chemin_affiche starts with 'http' %}
-                                                    <img src="{{ film.chemin_affiche }}" alt="{{ film.titre }}" class="img-fluid">
-                                                {% else %}
-                                                    <i class="fas fa-film fa-5x"></i>
-                                                {% endif %}
+                                                <img src="{{ film.chemin_affiche }}" alt="{{ film.titre }}" class="img-fluid rounded">
+                                            </div>
+                                            <div class="text-center mb-3">
+                                                <div class="film-price display-6">{{ film.prix_location_par_default }}€</div>
+                                                <div class="film-rating">
+                                                    {% for i in 1..5 %}
+                                                        {% if i <= film.rating %}
+                                                            <i class="fas fa-star"></i>
+                                                        {% else %}
+                                                            <i class="far fa-star"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <span class="ms-1">{{ film.rating }}/5</span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-8">
                                             <p><strong>Durée :</strong> {{ film.duree }}</p>
-                                            <p><strong>Genre :</strong> {{ film.genre }}</p>
-                                            <p><strong>Prix location :</strong> {{ film.prix_location_par_default }}€</p>
-                                            <p><strong>Note :</strong> {{ film.rating }}/5</p>
+                                            <p><strong>Genres :</strong> 
+                                                {% set film_genres = film.genre|split(', ') %}
+                                                {% for genre in film_genres %}
+                                                    <span class="genre-badge">{{ genre }}</span>
+                                                {% endfor %}
+                                            </p>
+                                            <p><strong>Année :</strong> {{ film.annee }}</p>
+                                            {% if film.est_nouveau %}
+                                                <p><span class="badge bg-success">Nouveauté</span></p>
+                                            {% endif %}
                                             <hr class="bg-secondary">
                                             <p><strong>Synopsis :</strong></p>
                                             <p>{{ film.synopsis }}</p>
@@ -283,7 +318,8 @@
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                                     <button class="btn btn-primary add-to-cart"
                                             data-film="{{ film.titre }}"
-                                            data-price="{{ film.prix_location_par_default }}">
+                                            data-price="{{ film.prix_location_par_default }}"
+                                            data-film-id="{{ film.id }}">
                                         <i class="fas fa-cart-plus me-2"></i>Ajouter au panier
                                     </button>
                                 </div>
@@ -302,7 +338,7 @@
                                 Aucun film ne correspond à vos critères de recherche.
                                 <a href="{{ path('app_movies') }}" class="alert-link">Voir tous les films</a>
                             {% else %}
-                                La base de données est vide ou n'est pas accessible.
+                                {{ message|default('La base de données est vide ou n\'est pas accessible.') }}
                             {% endif %}
                         </p>
                     </div>
@@ -315,45 +351,63 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        document.addEventListener('DOMContentLoaded', function()
-        {
-            document.querySelectorAll('.add-to-cart').forEach(button =>
-            {
-                button.addEventListener('click', function()
-                {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ajout au panier
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
                     const filmTitle = this.getAttribute('data-film');
                     const filmPrice = this.getAttribute('data-price');
-=                    const cartBadge = document.querySelector('.badge.bg-danger');
-                    if(cartBadge)
-                    {
+                    const filmId = this.getAttribute('data-film-id');
+                    
+                    // Mettre à jour le compteur du panier
+                    const cartBadge = document.querySelector('.badge.bg-danger');
+                    if (cartBadge) {
                         let currentCount = parseInt(cartBadge.textContent) || 0;
                         cartBadge.textContent = currentCount + 1;
-=                        cartBadge.style.transform = 'scale(1.5)';
-                        setTimeout(() =>
-                        {
+                        
+                        // Animation
+                        cartBadge.style.transform = 'scale(1.5)';
+                        setTimeout(() => {
                             cartBadge.style.transform = 'scale(1)';
                         }, 300);
                     }
                     
+                    // Notification
                     const notification = document.createElement('div');
                     notification.className = 'alert alert-success position-fixed';
                     notification.style.cssText = 'top: 20px; right: 20px; z-index: 1050;';
-                    notification.innerHTML = `<i class="fas fa-check-circle me-2"></i>"${filmTitle}" ajouté au panier (${filmPrice}€)`;
+                    notification.innerHTML = `
+                        <i class="fas fa-check-circle me-2"></i>
+                        "${filmTitle}" ajouté au panier (${filmPrice}€)
+                    `;
+                    
                     document.body.appendChild(notification);
-                    setTimeout(() =>
-                    {
+                    
+                    setTimeout(() => {
                         notification.remove();
                     }, 3000);
+                    
+                    // Animation du bouton
                     const originalHTML = this.innerHTML;
                     this.innerHTML = '<i class="fas fa-check"></i> Ajouté';
                     this.classList.remove('btn-success', 'btn-primary');
                     this.classList.add('btn-secondary');
-                    setTimeout(() =>
-                    {
+                    
+                    setTimeout(() => {
                         this.innerHTML = originalHTML;
                         this.classList.remove('btn-secondary');
                         this.classList.add(this.getAttribute('class').includes('btn-outline') ? 'btn-outline-primary' : 'btn-success');
                     }, 2000);
+                    
+                    // Envoyer la requête au serveur (pour plus tard)
+                    /*
+                    fetch('/panier/ajouter/' + filmId, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    */
                 });
             });
         });

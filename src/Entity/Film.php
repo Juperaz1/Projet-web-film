@@ -2,36 +2,49 @@
 
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'FILM')]
+#[ORM\Table(name: 'FILMS')]
 class Film
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: 'id_film', type: 'integer')]
+    #[ORM\Column(name: 'IdFilm', type: 'integer')]
     private ?int $idFilm = null;
 
-    #[ORM\Column(name: 'titre', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'Titre', type: 'string', length: 255, nullable: false)]
     private string $titre;
 
-    #[ORM\Column(name: 'annee', type: 'smallint', nullable: false)]
+    #[ORM\Column(name: 'Annee', type: 'smallint', nullable: false)]
     private int $annee;
 
-    #[ORM\Column(name: 'duree', type: 'smallint', nullable: false, options: ['comment' => 'Durée en minutes'])]
+    #[ORM\Column(name: 'Duree', type: 'smallint', nullable: false)]
     private int $duree;
 
-    #[ORM\Column(name: 'synopsis', type: 'text', nullable: true)]
+    #[ORM\Column(name: 'Synopsis', type: 'text', nullable: true)]
     private ?string $synopsis = null;
 
-    #[ORM\Column(name: 'genre', type: 'string', length: 100, nullable: true)]
-    private ?string $genre = null;
+    #[ORM\Column(name: 'PrixLocationDefault', type: 'decimal', precision: 5, scale: 2, nullable: false)]
+    private string $prixLocationDefault;
 
-    #[ORM\Column(name: 'prix_location_par_default', type: 'decimal', precision: 5, scale: 2, nullable: false)]
-    private string $prixLocationParDefault;
-
-    #[ORM\Column(name: 'chemin_affiche', type: 'string', length: 500, nullable: true)]
+    #[ORM\Column(name: 'CheminAffiche', type: 'string', length: 500, nullable: true)]
     private ?string $cheminAffiche = null;
+
+    #[ORM\Column(name: 'Note', type: 'decimal', precision: 2, scale: 1, nullable: true)]
+    private ?string $note = null;
+
+    #[ORM\ManyToMany(targetEntity: Genre::class)]
+    #[ORM\JoinTable(name: 'FILM_GENRE')]
+    #[ORM\JoinColumn(name: 'IdFilm', referencedColumnName: 'IdFilm')]
+    #[ORM\InverseJoinColumn(name: 'IdGenre', referencedColumnName: 'IdGenre')]
+    private Collection $genres;
+
+    public function __construct()
+    {
+        $this->genres = new ArrayCollection();
+    }
 
     public function getIdFilm(): ?int
     {
@@ -53,17 +66,21 @@ class Film
     {
         return $this->synopsis;
     }
-    public function getGenre(): ?string
+    public function getPrixLocationDefault(): string
     {
-        return $this->genre;
-    }
-    public function getPrixLocationParDefault(): string
-    {
-        return $this->prixLocationParDefault;
+        return $this->prixLocationDefault;
     }
     public function getCheminAffiche(): ?string
     {
         return $this->cheminAffiche;
+    }
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+    public function getGenres(): Collection
+    {
+        return $this->genres;
     }
 
 
@@ -72,14 +89,14 @@ class Film
         $this->titre = $titre;
         return $this;
     }
-    public function setDuree(int $duree): self
-    {
-        $this->duree = $duree;
-        return $this;
-    }
     public function setAnnee(int $annee): self
     {
         $this->annee = $annee;
+        return $this;
+    }
+    public function setDuree(int $duree): self
+    {
+        $this->duree = $duree;
         return $this;
     }
     public function setSynopsis(?string $synopsis): self
@@ -87,14 +104,9 @@ class Film
         $this->synopsis = $synopsis;
         return $this;
     }
-    public function setGenre(?string $genre): self
+    public function setPrixLocationDefault(string $prixLocationDefault): self
     {
-        $this->genre = $genre;
-        return $this;
-    }
-    public function setPrixLocationParDefault(string $prixLocationParDefault): self
-    {
-        $this->prixLocationParDefault = $prixLocationParDefault;
+        $this->prixLocationDefault = $prixLocationDefault;
         return $this;
     }
     public function setCheminAffiche(?string $cheminAffiche): self
@@ -102,10 +114,26 @@ class Film
         $this->cheminAffiche = $cheminAffiche;
         return $this;
     }
+    public function setNote(?string $note): self
+    {
+        $this->note = $note;
+        return $this;
+    }
 
-    /**
-     * Formate la durée en format lisible (ex: "2h28" ou "148 min")
-     */
+    public function addGenre(Genre $genre): self
+    {
+        if(!$this->genres->contains($genre))
+        {
+            $this->genres[] = $genre;
+        }
+        return $this;
+    }
+    public function removeGenre(Genre $genre): self
+    {
+        $this->genres->removeElement($genre);
+        return $this;
+    }
+
     public function getFormattedDuration(): string
     {
         if($this->duree >= 60)
@@ -117,9 +145,6 @@ class Film
         return sprintf('%d min', $this->duree);
     }
 
-    /**
-     * Retourne l'URL complète de l'affiche ou une image par défaut
-     */
     public function getFullAfficheUrl(): string
     {
         if($this->cheminAffiche && str_starts_with($this->cheminAffiche, 'http'))
@@ -128,5 +153,25 @@ class Film
         }
         $defaultColor = substr(md5($this->titre), 0, 6);
         return sprintf('https://via.placeholder.com/300x450/%s/ffffff?text=%s', $defaultColor, urlencode(substr($this->titre, 0, 20)));
+    }
+
+    public function getGenresAsString(): string
+    {
+        $genres = [];
+        foreach ($this->genres as $genre)
+        {
+            $genres[] = $genre->getLibelleGenre();
+        }
+        return implode(', ', $genres) ?: 'Non spécifié';
+    }
+
+    public function isRecent(): bool
+    {
+        return (date('Y') - $this->annee) <= 2;
+    }
+
+    public function isPopular(): bool
+    {
+        return (float) $this->note > 4.00;
     }
 }

@@ -188,7 +188,7 @@
     <section class="container mb-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="section-title fw-bold">Films populaires</h2>
-            <a href="#" class="btn btn-outline-primary">Voir tous <i class="fas fa-arrow-right ms-2"></i></a>
+            <a href="{{ path('app_movies') }}" class="btn btn-outline-primary">Voir tous <i class="fas fa-arrow-right ms-2"></i></a>
         </div>
         
         <div class="row">
@@ -196,27 +196,35 @@
             <div class="col-md-3 mb-4">
                 <div class="movie-card">
                     <img src="{{ movie.image }}" alt="{{ movie.title }}">
-                    <div class="price-tag">{{ movie.price }}€</div>
+                    <div class="price-tag">{{ movie.price|number_format(2, ',') }}€</div>
                     <div class="movie-overlay">
                         <h5 class="fw-bold">{{ movie.title }}</h5>
                         <p class="mb-2 text-muted">{{ movie.genre }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="rating">
                                 {% for i in 1..5 %}
-                                    {% if i <= movie.rating %}
+                                    {% if i <= movie.rating|round %}
                                         <i class="fas fa-star"></i>
                                     {% else %}
                                         <i class="far fa-star"></i>
                                     {% endif %}
                                 {% endfor %}
+                                <small class="ms-1">({{ movie.rating|number_format(1) }})</small>
                             </div>
                             <button class="btn btn-sm btn-primary add-to-cart" 
                                     data-movie="{{ movie.title }}"
-                                    data-price="{{ movie.price }}">
+                                    data-price="{{ movie.price }}"
+                                    data-movie-id="{{ movie.id }}">
                                 <i class="fas fa-cart-plus"></i> Ajouter
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-film me-2"></i>Aucun film populaire disponible pour le moment.
                 </div>
             </div>
             {% endfor %}
