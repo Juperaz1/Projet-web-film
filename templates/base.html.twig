@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SiteFilm - Votre plateforme de streaming avec des milliers de films">
+    
     <title>{% block title %}SiteFilm - Votre cinéma en ligne{% endblock %}</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     
     {% block stylesheets %}{% endblock %}
     
@@ -20,15 +24,15 @@
             --darker-color: #050505;
             --light-color: #f7fafc;
             --gray-color: #2d3748;
+            --success-color: #38a169;
         }
         
         body {
             background-color: var(--dark-color);
             color: var(--light-color);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(102, 126, 234, 0.05) 0%, transparent 25%),
-                radial-gradient(circle at 90% 80%, rgba(118, 75, 162, 0.05) 0%, transparent 25%);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             position: relative;
         }
         
@@ -40,153 +44,323 @@
             width: 100%;
             height: 100%;
             background: 
+                radial-gradient(circle at 20% 20%, rgba(102, 126, 234, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.05) 0%, transparent 50%),
                 linear-gradient(90deg, transparent 49%, rgba(255,255,255,0.01) 50%),
                 linear-gradient(transparent 49%, rgba(255,255,255,0.01) 50%);
-            background-size: 3px 3px;
+            background-size: cover, cover, 3px 3px, 3px 3px;
             pointer-events: none;
             z-index: -1;
-            opacity: 0.1;
+            opacity: 0.2;
         }
         
         .navbar {
-            background-color: rgba(10, 10, 10, 0.95);
+            background-color: rgba(10, 10, 10, 0.98) ;
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            padding: 1rem 0;
         }
         
-        .navbar-brand span {
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .navbar-brand i {
+            font-size: 1.8rem;
         }
         
         .nav-link {
-            color: rgba(255, 255, 255, 0.8) !important;
+            color: rgba(255, 255, 255, 0.8) ;
+            font-weight: 500;
+            padding: 0.5rem 1rem ;
+            border-radius: 8px;
+            margin: 0 0.2rem;
             transition: all 0.3s ease;
         }
         
-        .nav-link:hover, .nav-link.active {
-            color: white !important;
-            text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
-        }
-        
-        .card {
-            background-color: rgba(20, 20, 20, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(102, 126, 234, 0.3);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+        .nav-link:hover,
+        .nav-link.active {
+            color: white ;
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
         }
         
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             border: none;
-            padding: 12px 28px;
-            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
             font-weight: 600;
+            letter-spacing: 0.5px;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
         }
         
         .btn-primary:hover {
             background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
         
         .btn-outline-primary {
             border: 2px solid var(--primary-color);
             color: var(--primary-color);
             background: transparent;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
         
         .btn-outline-primary:hover {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             border-color: transparent;
+            transform: translateY(-2px);
         }
         
-        .form-control {
-            background-color: rgba(30, 30, 30, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
+        .movie-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            height: 420px;
+            background: var(--darker-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
-        .form-control:focus {
-            background-color: rgba(40, 40, 40, 0.8);
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        .movie-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
+        }
+        
+        .movie-card img {
+            width: 100%;
+            height: 75%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        
+        .movie-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .movie-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+            padding: 1.5rem;
+        }
+        
+        .movie-overlay h5 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .price-tag {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .rating {
+            display: flex;
+            align-items: center;
+        }
+        
+        .rating i {
+            color: #ffd700;
+            margin-right: 2px;
         }
         
         footer {
             background: linear-gradient(135deg, var(--darker-color), #111111);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             margin-top: auto;
+            padding: 3rem 0 1.5rem;
         }
         
-        .dropdown-menu {
-            background-color: rgba(30, 30, 30, 0.98);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-        
-        .dropdown-item {
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .dropdown-item:hover {
-            background-color: rgba(102, 126, 234, 0.1);
+        footer h5, footer h6 {
             color: white;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        
+        footer a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+        
+        footer a:hover {
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        
+        .cart-notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.3s ease;
+            max-width: 350px;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
         
         .badge {
             font-weight: 600;
+            font-size: 0.75rem;
+            padding: 0.35em 0.65em;
         }
         
-        .text-muted {
-            color: #a0aec0 !important;
+        .form-control {
+            background-color: rgba(30, 30, 30, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            background-color: rgba(40, 40, 40, 0.9);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            color: white;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, 
+                rgba(10, 10, 10, 0.95) 0%,
+                rgba(26, 32, 44, 0.9) 100%);
+            padding: 6rem 0;
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle at 30% 50%,
+                rgba(102, 126, 234, 0.1) 0%,
+                transparent 50%
+            );
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #a0aec0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .movie-card {
+                height: 380px;
+            }
+            
+            .navbar-collapse {
+                background: rgba(10, 10, 10, 0.98);
+                padding: 1rem;
+                border-radius: 12px;
+                margin-top: 1rem;
+                border: 1px solid rgba(255, 255, 255, 0.05);
+            }
         }
     </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
-    <nav class="navbar navbar-expand-lg navbar-dark">
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-3" href="{{ path('app_home') }}">
-                <i class="fas fa-film me-2" style="color: var(--primary-color);"></i>
-                <span>SiteFilm</span>
+            <a class="navbar-brand" href="{{ path('app_home') }}">
+                <i class="fas fa-film"></i>
+                SiteFilm
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
                 <span class="navbar-toggler-icon"></span>
             </button>
             
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarMain">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ path('app_home') }}">Accueil</a>
+                        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_home' ? 'active' : '' }}" 
+                           href="{{ path('app_home') }}">
+                            <i class="fas fa-home me-1"></i> Accueil
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/films">Films</a>
+                        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_movies' ? 'active' : '' }}" 
+                           href="{{ path('app_movies') }}">
+                            <i class="fas fa-film me-1"></i> Films
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Nouveautés</a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-star me-1"></i> Nouveautés
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Catégories</a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-tags me-1"></i> Catégories
+                        </a>
                     </li>
                 </ul>
                 
                 <form class="d-flex mx-3" style="max-width: 300px;">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Rechercher un film...">
+                        <input type="search" class="form-control" placeholder="Rechercher un film..." 
+                               aria-label="Rechercher">
                         <button class="btn btn-outline-primary" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
@@ -196,8 +370,8 @@
                 <div class="d-flex align-items-center">
                     <a href="#" class="btn btn-outline-primary position-relative me-3 cart-btn">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            3
+                        <span class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            0
                         </span>
                     </a>
                     
@@ -205,12 +379,41 @@
                         <button class="btn btn-dark dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
                             <i class="fas fa-user me-2"></i>Mon compte
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-heart me-2"></i>Favoris</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-in-alt me-2"></i>Connexion</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-plus me-2"></i>Inscription</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            {% if app.user %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_profile') }}">
+                                        <i class="fas fa-user me-2"></i>Profil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_favoris') }}">
+                                        <i class="fas fa-heart me-2"></i>Favoris
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_parametres') }}">
+                                        <i class="fas fa-cog me-2"></i>Paramètres
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_login') }}">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Connexion
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_register') }}">
+                                        <i class="fas fa-user-plus me-2"></i>Inscription
+                                    </a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -218,36 +421,312 @@
         </div>
     </nav>
 
-    <main class="flex-grow-1 py-4">
+    <main class="flex-grow-1">
         {% block body %}{% endblock %}
     </main>
 
-    <footer class="py-5 mt-5">
+    <footer>
         <div class="container">
-            <div class="text-center">
-                <p class="mb-0 text-muted">&copy; {{ "now"|date("Y") }} SiteFilm. Tous droits réservés.</p>
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3">
+                        <i class="fas fa-film me-2" style="color: var(--primary-color);"></i>
+                        SiteFilm
+                    </h5>
+                    <p class="text-muted mb-4">
+                        Votre destination cinéma en ligne. Des milliers de films à découvrir, 
+                        disponibles en streaming et location.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-muted"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-youtube fa-lg"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h6 class="mb-3">Explorer</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                        <li><a href="{{ path('app_movies') }}">Films</a></li>
+                        <li><a href="#">Nouveautés</a></li>
+                        <li><a href="#">Tendances</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h6 class="mb-3">Compte</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ path('app_profile') }}">Profil</a></li>
+                        <li><a href="{{ path('app_favoris') }}">Favoris</a></li>
+                        <li><a href="{{ path('app_parametres') }}">Paramètres</a></li>
+                        <li><a href="#">Historique</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <h6 class="mb-3">Contact & Support</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-envelope me-2 text-muted"></i>
+                            contact@sitefilm.com
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-phone me-2 text-muted"></i>
+                            +33 1 23 45 67 89
+                        </li>
+                        <li>
+                            <i class="fas fa-question-circle me-2 text-muted"></i>
+                            <a href="#">Centre d'aide</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-muted mb-0">
+                        &copy; {{ "now"|date("Y") }} SiteFilm. Tous droits réservés.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-muted me-3">Mentions légales</a>
+                    <a href="#" class="text-muted me-3">Confidentialité</a>
+                    <a href="#" class="text-muted">Conditions d'utilisation</a>
+                </div>
             </div>
         </div>
     </footer>
+
+    <div id="cartNotification" class="cart-notification">
+        <i class="fas fa-check-circle me-2" style="color: var(--success-color);"></i>
+        <span id="notificationText">Produit ajouté au panier</span>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     {% block javascripts %}{% endblock %}
     
     <script>
-        document.querySelectorAll('.cart-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const badge = this.querySelector('.badge');
-                let count = parseInt(badge.textContent);
-                badge.textContent = count + 1;
+        class ShoppingCart {
+            constructor() {
+                this.items = JSON.parse(localStorage.getItem('sitefilm_cart')) || [];
+                this.updateCartDisplay();
+            }
+            
+            addItem(item) {
+                const existingItem = this.items.find(i => i.id === item.id);
                 
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    this.items.push({
+                        ...item,
+                        quantity: 1,
+                        addedAt: new Date().toISOString()
+                    });
+                }
+                
+                this.save();
+                this.updateCartDisplay();
+                this.showNotification(`${item.title} ajouté au panier - ${item.price.toFixed(2)}€`);
+                
+                return this.items;
+            }
+            
+            removeItem(itemId) {
+                this.items = this.items.filter(item => item.id !== itemId);
+                this.save();
+                this.updateCartDisplay();
+                return this.items;
+            }
+            
+            updateQuantity(itemId, quantity) {
+                const item = this.items.find(i => i.id === itemId);
+                if (item) {
+                    if (quantity <= 0) {
+                        return this.removeItem(itemId);
+                    }
+                    item.quantity = quantity;
+                    this.save();
+                    this.updateCartDisplay();
+                }
+                return this.items;
+            }
+            
+            clear() {
+                this.items = [];
+                this.save();
+                this.updateCartDisplay();
+            }
+            
+            getTotal() {
+                return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            }
+            
+            getItemCount() {
+                return this.items.reduce((count, item) => count + item.quantity, 0);
+            }
+            
+            updateCartDisplay() {
+                const itemCount = this.getItemCount();
+                const countElements = document.querySelectorAll('.cart-count');
+                
+                countElements.forEach(element => {
+                    element.textContent = itemCount;
+                    element.style.display = itemCount > 0 ? 'block' : 'none';
+                });
+                
+                const cartBtn = document.querySelector('.cart-btn');
+                if (cartBtn) {
+                    if (itemCount > 0) {
+                        cartBtn.classList.add('has-items');
+                    } else {
+                        cartBtn.classList.remove('has-items');
+                    }
+                }
+            }
+            
+            showNotification(message) {
+                const notification = document.getElementById('cartNotification');
+                const notificationText = document.getElementById('notificationText');
+                
+                if (notification && notificationText) {
+                    notificationText.textContent = message;
+                    notification.style.display = 'flex';
+                    notification.style.alignItems = 'center';
+                    
+                    notification.style.animation = 'slideIn 0.3s ease';
+                    
+                    setTimeout(() => {
+                        notification.style.animation = 'slideOut 0.3s ease';
+                        setTimeout(() => {
+                            notification.style.display = 'none';
+                        }, 300);
+                    }, 3000);
+                }
+            }
+            
+            save() {
+                localStorage.setItem('sitefilm_cart', JSON.stringify(this.items));
+            }
+        }
+        
+        const cart = new ShoppingCart();
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const movieData = {
+                        id: this.dataset.movieId,
+                        title: this.dataset.movie,
+                        price: parseFloat(this.dataset.price),
+                        image: this.closest('.movie-card')?.querySelector('img')?.src || ''
+                    };
+                    
+                    cart.addItem(movieData);
+                    
+                    const originalHTML = this.innerHTML;
+                    const originalClass = this.className;
+                    
+                    this.innerHTML = '<i class="fas fa-check me-1"></i>Ajouté';
+                    this.className = originalClass.replace('btn-primary', 'btn-success');
+                    this.disabled = true;
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalHTML;
+                        this.className = originalClass;
+                        this.disabled = false;
+                    }, 2000);
+                });
+            });
+            
+            document.querySelectorAll('.cart-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if (cart.getItemCount() > 0) {
+                        window.location.href = '/panier';
+                    } else {
+                        cart.showNotification('Votre panier est vide');
+                    }
+                });
+            });
+            
+            const searchForm = document.querySelector('form.d-flex');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const searchInput = this.querySelector('input[type="search"]');
+                    if (searchInput.value.trim()) {
+                        console.log('Recherche:', searchInput.value);
+                    }
+                });
+            }
+            
+            const movieCards = document.querySelectorAll('.movie-card');
+            movieCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('animate__animated', 'animate__fadeInUp');
+            });
+            
+            // Animation du bouton panier au clic
+            document.querySelector('.cart-btn').addEventListener('click', function(e) {
                 this.style.transform = 'scale(1.1)';
                 setTimeout(() => {
                     this.style.transform = '';
                 }, 300);
             });
         });
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+            
+            .cart-btn.has-items {
+                border-color: var(--primary-color);
+                background: rgba(102, 126, 234, 0.1);
+            }
+            
+            .animate__animated {
+                animation-duration: 0.6s;
+            }
+            
+            .dropdown-menu {
+                background-color: rgba(30, 30, 30, 0.98);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+            }
+            
+            .dropdown-item {
+                color: rgba(255, 255, 255, 0.8);
+                transition: all 0.2s ease;
+            }
+            
+            .dropdown-item:hover {
+                background-color: rgba(102, 126, 234, 0.1);
+                color: white;
+            }
+            
+            .dropdown-item.text-danger:hover {
+                background-color: rgba(229, 62, 62, 0.1);
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

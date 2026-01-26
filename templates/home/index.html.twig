@@ -1,144 +1,64 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Accueil - SiteFilm{% endblock %}
+
 {% block stylesheets %}
     <style>
         .hero-section {
-            background: linear-gradient(135deg, rgba(10, 10, 10, 0.9), rgba(26, 32, 44, 0.9)),
-                        url('https://via.placeholder.com/1920x600/0a0a0a/667eea?text=Cinéma+Noir');
+            background: linear-gradient(135deg, 
+                rgba(10, 10, 10, 0.97) 0%,
+                rgba(20, 20, 30, 0.95) 100%),
+                url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
-            color: white;
+            background-attachment: fixed;
             padding: 8rem 0;
             margin-bottom: 4rem;
             position: relative;
             overflow: hidden;
-            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
         }
         
-        .hero-section::before {
+        .hero-section::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, transparent 60%, rgba(102, 126, 234, 0.1));
+            background: linear-gradient(45deg, 
+                rgba(10, 10, 10, 0.9) 0%,
+                rgba(102, 126, 234, 0.1) 50%,
+                rgba(10, 10, 10, 0.9) 100%);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
         }
         
         .hero-title {
             font-size: 3.5rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #fff 0%, #a0aec0 100%);
+            background: linear-gradient(135deg, #fff 0%, #667eea 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 1.5rem;
+            line-height: 1.2;
         }
         
         .hero-subtitle {
-            font-size: 1.5rem;
-            color: #a0aec0;
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.8);
             margin-bottom: 2rem;
-        }
-        
-        .movie-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 15px;
-            height: 450px;
-            background: rgba(20, 20, 20, 0.8);
-        }
-        
-        .movie-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .movie-card:hover img {
-            transform: scale(1.1);
-        }
-        
-        .movie-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
-            padding: 2rem;
-            color: white;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-        }
-        
-        .movie-card:hover .movie-overlay {
-            transform: translateY(0);
-        }
-        
-        .price-tag {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 2;
-        }
-        
-        .rating i {
-            color: #f6ad55;
-            margin-right: 2px;
-        }
-        
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-        
-        .cart-notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(30, 30, 30, 0.95);
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
-            display: none;
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            color: white;
-            max-width: 300px;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            max-width: 600px;
         }
         
         .section-title {
-            position: relative;
-            padding-bottom: 15px;
+            font-size: 2.2rem;
+            font-weight: 800;
             margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 1rem;
         }
         
         .section-title::after {
@@ -146,39 +66,130 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             border-radius: 2px;
         }
         
-        .newsletter-card {
-            background: linear-gradient(135deg, rgba(26, 32, 44, 0.9), rgba(10, 10, 10, 0.9));
-            border: 1px solid rgba(102, 126, 234, 0.2);
+        .category-card {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
         
-        .newsletter-card::before {
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.15);
+        }
+        
+        .category-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .category-card:hover::before {
+            opacity: 1;
+        }
+        
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .category-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .feature-card {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            color: white;
+        }
+        
+        .feature-title {
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-section {
+                padding: 6rem 0;
+                background-attachment: scroll;
+            }
         }
     </style>
 {% endblock %}
 
 {% block body %}
     <section class="hero-section">
-        <div class="container position-relative">
+        <div class="container hero-content">
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <h1 class="hero-title">{{ title }}</h1>
-                    <div class="d-flex gap-3">
-                        <a href="/films" class="btn btn-primary btn-lg px-5"><i class="fas fa-play me-2"></i>Commencer</a>
+                    <p class="hero-subtitle">
+                        Des milliers de films et séries en streaming. Regardez ce que vous voulez, 
+                        quand vous voulez, sans publicité. Abonnez-vous dès maintenant.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="{{ path('app_movies') }}" class="btn btn-primary btn-lg px-5 py-3">
+                            <i class="fas fa-play me-2"></i>Commencer à regarder
+                        </a>
+                        <a href="{{ path('app_register') }}" class="btn btn-outline-primary btn-lg px-5 py-3">
+                            <i class="fas fa-crown me-2"></i>Essayer gratuitement
+                        </a>
                     </div>
                 </div>
             </div>
@@ -187,63 +198,76 @@
 
     <section class="container mb-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="section-title fw-bold">Films populaires</h2>
-            <a href="{{ path('app_movies') }}" class="btn btn-outline-primary">Voir tous <i class="fas fa-arrow-right ms-2"></i></a>
+            <h2 class="section-title">Films populaires</h2>
+            <a href="{{ path('app_movies') }}" class="btn btn-outline-primary">
+                Voir tous les films <i class="fas fa-arrow-right ms-2"></i>
+            </a>
         </div>
         
-        <div class="row">
-            {% for movie in popularMovies %}
-            <div class="col-md-3 mb-4">
-                <div class="movie-card">
-                    <img src="{{ movie.image }}" alt="{{ movie.title }}">
-                    <div class="price-tag">{{ movie.price|number_format(2, ',') }}€</div>
-                    <div class="movie-overlay">
-                        <h5 class="fw-bold">{{ movie.title }}</h5>
-                        <p class="mb-2 text-muted">{{ movie.genre }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="rating">
-                                {% for i in 1..5 %}
-                                    {% if i <= movie.rating|round %}
-                                        <i class="fas fa-star"></i>
-                                    {% else %}
-                                        <i class="far fa-star"></i>
-                                    {% endif %}
-                                {% endfor %}
-                                <small class="ms-1">({{ movie.rating|number_format(1) }})</small>
+        {% if popularMovies|length > 0 %}
+            <div class="row">
+                {% for movie in popularMovies|slice(0, 4) %}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="movie-card">
+                        <img src="{{ movie.image }}" alt="{{ movie.title }}" 
+                             onerror="this.src='https://via.placeholder.com/300x450/2d3748/fff?text=No+Image'">
+                        <div class="price-tag">{{ movie.price|number_format(2, ',') }}€</div>
+                        <div class="movie-overlay">
+                            <h5>{{ movie.title }}</h5>
+                            <p class="mb-2 text-muted small">{{ movie.genre }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="rating">
+                                    {% for i in 1..5 %}
+                                        {% if i <= movie.rating|round %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <small class="ms-2">{{ movie.rating|number_format(1) }}</small>
+                                </div>
+                                <button class="btn btn-sm btn-primary add-to-cart" 
+                                        data-movie-id="{{ movie.id }}"
+                                        data-movie="{{ movie.title }}"
+                                        data-price="{{ movie.price }}">
+                                    <i class="fas fa-cart-plus me-1"></i>Ajouter
+                                </button>
                             </div>
-                            <button class="btn btn-sm btn-primary add-to-cart" 
-                                    data-movie="{{ movie.title }}"
-                                    data-price="{{ movie.price }}"
-                                    data-movie-id="{{ movie.id }}">
-                                <i class="fas fa-cart-plus"></i> Ajouter
-                            </button>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% else %}
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-film me-2"></i>Aucun film populaire disponible pour le moment.
-                </div>
+        {% else %}
+            <div class="alert alert-dark text-center">
+                <i class="fas fa-film me-2"></i>
+                Aucun film disponible pour le moment.
             </div>
-            {% endfor %}
-        </div>
+        {% endif %}
     </section>
 
     <section class="container mb-5">
-        <h2 class="section-title fw-bold mb-4">Catégories</h2>
-        <div class="row g-3">
-            {% for category in ['Action', 'Drame', 'Comédie', 'Science-Fiction', 'Horreur', 'Romance', 'Documentaire', 'Animation'] %}
-            <div class="col-md-3">
-                <a href="#" class="card text-decoration-none">
-                    <div class="card-body text-center p-4">
-                        <div class="mb-3">
-                            <div style="width: 50px; height: 50px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-video" style="color: #667eea;"></i>
-                            </div>
+        <h2 class="section-title mb-4">Explorez par catégorie</h2>
+        <div class="row g-4">
+            {% set categories = [
+                {name: 'Action', icon: 'explosion'},
+                {name: 'Drame', icon: 'theater-masks'},
+                {name: 'Comédie', icon: 'laugh'},
+                {name: 'Science-Fiction', icon: 'robot'},
+                {name: 'Horreur', icon: 'ghost'},
+                {name: 'Romance', icon: 'heart'},
+                {name: 'Documentaire', icon: 'file-video'},
+                {name: 'Animation', icon: 'film'}
+            ] %}
+            
+            {% for category in categories %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <a href="#" class="category-card">
+                    <div class="text-center">
+                        <div class="category-icon">
+                            <i class="fas fa-{{ category.icon }}"></i>
                         </div>
-                        <h6 class="fw-bold mb-0">{{ category }}</h6>
+                        <div class="category-name">{{ category.name }}</div>
                     </div>
                 </a>
             </div>
@@ -251,45 +275,101 @@
         </div>
     </section>
 
-    <div id="cartNotification" class="cart-notification">
-        <i class="fas fa-check-circle me-2" style="color: #38a169;"></i>
-        <span id="notificationText">Produit ajouté au panier</span>
-    </div>
+    <section class="container mb-5">
+        <h2 class="section-title mb-4">Pourquoi choisir SiteFilm ?</h2>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <h3 class="feature-title">Streaming illimité</h3>
+                    <p class="feature-description">
+                        Accédez à notre bibliothèque complète de films et séries 
+                        sans aucune limite de temps ou de quantité.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Multi-écrans</h3>
+                    <p class="feature-description">
+                        Regardez sur votre TV, smartphone, tablette ou ordinateur. 
+                        Tous vos appareils sont compatibles.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <h3 class="feature-title">Sans publicité</h3>
+                    <p class="feature-description">
+                        Profitez de vos films sans interruption publicitaire. 
+                        Une expérience de visionnage pure et immersive.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container mb-5">
+        <div class="card news-letter-card" style="border-color: rgba(102, 126, 234, 0.3);">
+            <div class="card-body p-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <h3 class="fw-bold mb-3">Restez informé</h3>
+                        <p class="text-muted mb-0">
+                            Inscrivez-vous à notre newsletter pour recevoir les dernières nouveautés 
+                            et offres exclusives directement dans votre boîte mail.
+                        </p>
+                    </div>
+                    <div class="col-lg-6">
+                        <form class="d-flex">
+                            <input type="email" class="form-control me-2" 
+                                   placeholder="Votre adresse email" required>
+                            <button type="submit" class="btn btn-primary">
+                                S'abonner
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        document.querySelectorAll('.add-to-cart').forEach(button =>
-        {
-            button.addEventListener('click', function() {
-                const movieTitle = this.getAttribute('data-movie');
-                const moviePrice = this.getAttribute('data-price');
-                const originalHTML = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-check"></i> Ajouté';
-                this.classList.remove('btn-primary');
-                this.classList.add('btn-success');
-                const cartBadge = document.querySelector('.badge');
-                let currentCount = parseInt(cartBadge.textContent);
-                cartBadge.textContent = currentCount + 1;
-                const notification = document.getElementById('cartNotification');
-                const notificationText = document.getElementById('notificationText');
-                notificationText.textContent = `${movieTitle} ajouté au panier - ${moviePrice}€`;
-                notification.style.display = 'block';
-                cartBadge.style.transform = 'scale(1.5)';
-                setTimeout(() =>
-                {
-                    cartBadge.style.transform = 'scale(1)';
-                }, 300);
-                setTimeout(() =>
-                {
-                    notification.style.display = 'none';
-                }, 3000);
-                setTimeout(() =>
-                {
-                    this.innerHTML = originalHTML;
-                    this.classList.remove('btn-success');
-                    this.classList.add('btn-primary');
-                }, 2000);
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.movie-card').forEach(card => {
+                observer.observe(card);
+            });
+            
+            document.querySelectorAll('.category-card').forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.05}s`;
+            });
+            
+            document.querySelectorAll('.feature-card').forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
             });
         });
     </script>

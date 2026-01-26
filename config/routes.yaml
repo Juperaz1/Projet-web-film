@@ -1,17 +1,56 @@
-# yaml-language-server: $schema=../vendor/symfony/routing/Loader/schema/routing.schema.json
-
-# This file is the entry point to configure the routes of your app.
-# Methods with the #[Route] attribute are automatically imported.
-# See also https://symfony.com/doc/current/routing.html
-
-# To list all registered routes, run the following command:
-#   bin/console debug:router
+# config/routes/web.yaml
+app_home:
+    path: /
+    controller: App\Controller\HomeController::index
+    methods: GET
 
 app_movies:
     path: /films
     controller: App\Controller\MovieController::index
     methods: GET
 
+app_profile:
+    path: /profile
+    controller: App\Controller\ProfileController::index
+    methods: [GET]
+
+app_favoris:
+    path: /profile/favoris
+    controller: App\Controller\ProfileController::favoris
+    methods: [GET]
+
+app_parametres:
+    path: /profile/parametres
+    controller: App\Controller\ProfileController::parametres
+    methods: [GET]
+
+app_login:
+    path: /connexion
+    controller: App\Controller\LoginController::login
+    methods: [GET, POST]
+
+app_register:
+    path: /inscription
+    controller: App\Controller\RegistrationController::register
+    methods: [GET, POST]
+
+app_logout:
+    path: /deconnexion
+    controller: App\Controller\LoginController::logout
+    methods: GET
+
+app_add_to_cart:
+    path: /api/cart/add
+    controller: App\Controller\CartController::add
+    methods: [POST]
+
+app_view_cart:
+    path: /panier
+    controller: App\Controller\CartController::view
+    methods: [GET]
+
+# Import automatique des routes des contrôleurs avec attributs
 controllers:
     resource: ../src/Controller/
     type: attribute
+    prefix: /
