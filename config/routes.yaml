@@ -49,6 +49,30 @@ app_view_cart:
     controller: App\Controller\CartController::view
     methods: [GET]
 
+admin_films:
+    path: /admin/films
+    controller: App\Controller\AdminController::index
+    methods: GET
+
+admin_film_new:
+    path: /admin/films/new
+    controller: App\Controller\AdminController::new
+    methods: [GET, POST]
+
+admin_film_edit:
+    path: /admin/films/{id}/edit
+    controller: App\Controller\AdminController::edit
+    methods: [GET, POST]
+    requirements:
+        id: '\d+'
+
+admin_film_delete:
+    path: /admin/films/{id}/delete
+    controller: App\Controller\AdminController::delete
+    methods: GET
+    requirements:
+        id: '\d+'
+
 # Import automatique des routes des contrôleurs avec attributs
 controllers:
     resource: ../src/Controller/

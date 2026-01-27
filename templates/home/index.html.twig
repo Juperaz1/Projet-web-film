@@ -179,16 +179,9 @@
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <h1 class="hero-title">{{ title }}</h1>
-                    <p class="hero-subtitle">
-                        Des milliers de films et séries en streaming. Regardez ce que vous voulez, 
-                        quand vous voulez, sans publicité. Abonnez-vous dès maintenant.
-                    </p>
                     <div class="d-flex flex-wrap gap-3">
                         <a href="{{ path('app_movies') }}" class="btn btn-primary btn-lg px-5 py-3">
                             <i class="fas fa-play me-2"></i>Commencer à regarder
-                        </a>
-                        <a href="{{ path('app_register') }}" class="btn btn-outline-primary btn-lg px-5 py-3">
-                            <i class="fas fa-crown me-2"></i>Essayer gratuitement
                         </a>
                     </div>
                 </div>
@@ -272,73 +265,6 @@
                 </a>
             </div>
             {% endfor %}
-        </div>
-    </section>
-
-    <section class="container mb-5">
-        <h2 class="section-title mb-4">Pourquoi choisir SiteFilm ?</h2>
-        <div class="row g-4">
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-play-circle"></i>
-                    </div>
-                    <h3 class="feature-title">Streaming illimité</h3>
-                    <p class="feature-description">
-                        Accédez à notre bibliothèque complète de films et séries 
-                        sans aucune limite de temps ou de quantité.
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3 class="feature-title">Multi-écrans</h3>
-                    <p class="feature-description">
-                        Regardez sur votre TV, smartphone, tablette ou ordinateur. 
-                        Tous vos appareils sont compatibles.
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-ban"></i>
-                    </div>
-                    <h3 class="feature-title">Sans publicité</h3>
-                    <p class="feature-description">
-                        Profitez de vos films sans interruption publicitaire. 
-                        Une expérience de visionnage pure et immersive.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="container mb-5">
-        <div class="card news-letter-card" style="border-color: rgba(102, 126, 234, 0.3);">
-            <div class="card-body p-5">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 mb-4 mb-lg-0">
-                        <h3 class="fw-bold mb-3">Restez informé</h3>
-                        <p class="text-muted mb-0">
-                            Inscrivez-vous à notre newsletter pour recevoir les dernières nouveautés 
-                            et offres exclusives directement dans votre boîte mail.
-                        </p>
-                    </div>
-                    <div class="col-lg-6">
-                        <form class="d-flex">
-                            <input type="email" class="form-control me-2" 
-                                   placeholder="Votre adresse email" required>
-                            <button type="submit" class="btn btn-primary">
-                                S'abonner
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 {% endblock %}

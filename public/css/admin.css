@@ -1,0 +1,234 @@
+/* public/css/admin.css */
+
+/* Styles pour les conteneurs admin */
+.admin-container,
+.admin-form-container {
+    background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Titres admin */
+.admin-container h1,
+.admin-form-container h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.admin-form-container h2 i,
+.admin-container h1 i {
+    color: var(--primary-color);
+}
+
+/* Labels des formulaires admin */
+.admin-form-container .form-label {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Inputs des formulaires admin - CORRECTION ICI */
+.admin-form-container .form-control,
+.admin-form-container .form-select {
+    background-color: rgba(30, 30, 30, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* BORDURE AJOUTÉE */
+    color: white;
+    border-radius: 10px;
+    padding: 0.75rem 1rem; /* PADDING AJOUTÉ */
+    transition: all 0.3s ease;
+}
+
+.admin-form-container .form-control:focus,
+.admin-form-container .form-select:focus {
+    background-color: rgba(30, 30, 30, 0.7);
+    border-color: var(--primary-color); /* BORDURE COLORÉE AU FOCUS */
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    color: white;
+    outline: none; /* ENLÈVE LE CONTOUR PAR DÉFAUT */
+}
+
+/* Style spécifique pour le select multiple des genres */
+.admin-form-container .form-select[multiple] {
+    height: auto;
+    min-height: 120px;
+    padding: 0.5rem;
+}
+
+/* Options dans le select */
+.admin-form-container .form-select option {
+    background-color: rgba(30, 30, 30, 0.95);
+    color: white;
+    padding: 8px 12px;
+    margin: 2px 0;
+    border-radius: 4px;
+}
+
+.admin-form-container .form-select option:checked,
+.admin-form-container .form-select option:selected {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+/* Style pour l'indicateur "Maintenez Ctrl..." */
+.admin-form-container small.form-text {
+    color: #666;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+    font-style: italic;
+}
+
+/* Groupes d'inputs */
+.admin-form-container .input-group-text {
+    background-color: rgba(30, 30, 30, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    border-left: none;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Groupes de champs */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Boutons admin */
+.btn-admin {
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+/* Styles pour le tableau admin */
+.admin-table th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.admin-table td {
+    color: #333;
+    vertical-align: middle;
+}
+
+/* Badges admin */
+.badge-admin {
+    padding: 0.35em 0.65em;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+/* Boutons d'action dans le tableau */
+.btn-action {
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.1rem;
+    border-radius: 6px;
+}
+
+/* Alertes admin */
+.alert-admin {
+    border-radius: 8px;
+    border: none;
+    backdrop-filter: blur(10px);
+}
+
+.alert-admin.alert-success {
+    background-color: rgba(56, 161, 105, 0.2);
+    border-color: rgba(56, 161, 105, 0.3);
+    color: #2d3748;
+}
+
+.alert-admin.alert-danger {
+    background-color: rgba(229, 62, 62, 0.2);
+    border-color: rgba(229, 62, 62, 0.3);
+    color: #2d3748;
+}
+
+/* État vide (aucun film) */
+.text-center.py-5 .fa-film {
+    color: #a0aec0;
+}
+
+/* Zone de recherche */
+.search-box {
+    max-width: 300px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-container,
+    .admin-form-container {
+        padding: 1.5rem;
+        margin: 1rem 0;
+    }
+    
+    .admin-container h1 {
+        font-size: 1.75rem;
+    }
+    
+    .admin-form-container h2 {
+        font-size: 1.5rem;
+    }
+    
+    .btn-admin {
+        padding: 0.5rem 1.5rem;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .d-flex.justify-content-between .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .admin-form-container .form-select[multiple] {
+        min-height: 100px;
+    }
+}
+
+/* Animation pour les nouvelles lignes du tableau */
+@keyframes fadeInRow {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.admin-table tbody tr {
+    animation: fadeInRow 0.3s ease-out;
+}
+
+/* Styles pour les statuts des films */
+.badge.bg-success.badge-admin {
+    background: linear-gradient(135deg, #38a169, #2f855a);
+}
+
+.badge.bg-warning.badge-admin {
+    background: linear-gradient(135deg, #d69e2e, #b7791f);
+    color: #1a202c;
+}
+
+.badge.bg-primary.badge-admin {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.badge.bg-info.badge-admin {
+    background: linear-gradient(135deg, #4299e1, #3182ce);
+}
+
+.badge.bg-secondary.badge-admin {
+    background: linear-gradient(135deg, #718096, #4a5568);
+}

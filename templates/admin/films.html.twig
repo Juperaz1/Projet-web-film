@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des films - Admin{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="admin-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="fas fa-film me-2"></i>Gestion des films
+                <span class="badge bg-primary badge-admin ms-2">{{ films|length }}</span>
+            </h1>
+        </div>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-admin alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>{{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger alert-admin alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>{{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+        {% if films is empty %}
+            <div class="text-center py-5">
+                <i class="fas fa-film fa-4x text-muted mb-3"></i>
+                <h3 class="text-muted">Aucun film dans la base de données</h3>
+                <p class="text-muted">Commencez par ajouter votre premier film !</p>
+                <a href="{{ path('admin_film_new') }}" class="btn btn-primary btn-lg mt-3"><i class="fas fa-plus me-2"></i>Ajouter le premier film</a>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-hover admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Titre</th>
+                            <th>Année</th>
+                            <th>Durée</th>
+                            <th>Prix</th>
+                            <th>Note</th>
+                            <th>Genres</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for film in films %}
+                        <tr>
+                            <td><span class="badge bg-secondary">#{{ film.idFilm }}</span></td>
+                            <td>
+                                <strong>{{ film.titre }}</strong>
+                                {% if film.isRecent() %}
+                                    <span class="badge bg-success badge-admin ms-1">Nouveau</span>
+                                {% endif %}
+                                {% if film.isPopular() %}
+                                    <span class="badge bg-warning text-dark badge-admin ms-1">Populaire</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ film.annee }}</td>
+                            <td>{{ film.getFormattedDuration }}</td>
+                            <td>
+                                <span class="badge bg-primary badge-admin">
+                                    {{ film.prixLocationDefault }} €
+                                </span>
+                            </td>
+                            <td>
+                                {% if film.note %}
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-star text-warning me-1"></i>
+                                        <span>{{ film.note }}/5</span>
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% for genre in film.genres|slice(0, 2) %}
+                                    <span class="badge bg-info badge-admin me-1">{{ genre.libelleGenre }}</span>
+                                {% endfor %}
+                                {% if film.genres|length > 2 %}
+                                    <span class="badge bg-secondary badge-admin">+{{ film.genres|length - 2 }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('admin_film_edit', {'id': film.idFilm}) }}" class="btn btn-warning btn-sm btn-action" title="Modifier"><i class="fas fa-edit"></i></a>
+                                    <a href="{{ path('admin_film_delete', {'id': film.idFilm}) }}" class="btn btn-danger btn-sm btn-action" onclick="return confirm('Supprimer « {{ film.titre }} » ? Cette action est irréversible.');" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                <div>
+                    <span class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        {{ films|length }} film{{ films|length > 1 ? 's' : '' }} au total
+                    </span>
+                </div>
+                <div>
+                    <a href="{{ path('admin_film_new') }}" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Ajouter un autre film</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

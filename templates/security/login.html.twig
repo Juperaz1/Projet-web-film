@@ -9,49 +9,31 @@
             <div class="card">
                 <div class="card-body p-4">
                     <h2 class="card-title text-center mb-4">Connexion</h2>
-                    
                     {% if error %}
                         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
-                    
                     <form method="post">
                         {% if app.user %}
                             <div class="mb-3">
-                                Vous êtes connecté en tant que {{ app.user.userIdentifier }}, 
-                                <a href="{{ path('app_logout') }}">Déconnexion</a>
+                                Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
                             </div>
                         {% endif %}
-                        
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" value="{{ last_username }}" 
-                                   name="_username" id="email"  {# CHANGÉ: name="_username" #}
-                                   class="form-control" autocomplete="email" 
-                                   required autofocus />
+                            <input type="email" value="{{ last_username }}" name="_username" id="email" class="form-control" autocomplete="email" required autofocus />
                         </div>
-                        
                         <div class="mb-3">
                             <label for="password" class="form-label">Mot de passe</label>
-                            <input type="password" name="_password" id="password" {# CHANGÉ: name="_password" #}
-                                   class="form-control" autocomplete="current-password" 
-                                   required />
+                            <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required />
                         </div>
-                        
-                        <input type="hidden" name="_csrf_token" 
-                               value="{{ csrf_token('authenticate') }}" />
-                        
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
                         <div class="d-grid">
-                            <button class="btn btn-primary btn-lg" type="submit">
-                                Se connecter
-                            </button>
+                            <button class="btn btn-primary btn-lg" type="submit">Se connecter</button>
                         </div>
                     </form>
-                    
                     <div class="mt-4 text-center">
                         <p class="text-muted mb-2">Pas encore de compte ?</p>
-                        <a href="{{ path('app_register') }}" class="btn btn-outline-primary">
-                            S'inscrire
-                        </a>
+                        <a href="{{ path('app_register') }}" class="btn btn-outline-primary">S'inscrire</a>
                     </div>
                 </div>
             </div>
