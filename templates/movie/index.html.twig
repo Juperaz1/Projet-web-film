@@ -6,7 +6,6 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        /* Styles existants inchangés */
         .library-header {
             background: linear-gradient(135deg, rgba(10, 10, 10, 0.95), rgba(26, 32, 44, 0.95));
             color: white;
@@ -112,6 +111,7 @@
             font-size: 1.2rem;
             font-weight: 700;
             color: #48bb78;
+            margin-right: auto;
         }
         
         .stats-card {
@@ -132,7 +132,6 @@
             }
         }
         
-        /* Nouveau : badge pour genres multiples */
         .genre-badge {
             display: inline-block;
             background: rgba(102, 126, 234, 0.1);
@@ -144,17 +143,59 @@
             margin-bottom: 5px;
             border: 1px solid rgba(102, 126, 234, 0.3);
         }
+        
+        .film-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .film-actions .btn {
+            padding: 0.5rem 0.75rem !important;
+            font-size: 1rem !important;
+            border-radius: 8px !important;
+        }
+        
+        .ajax-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            min-width: 300px;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-favorite {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+            color: white;
+            border: none;
+        }
+        
+        .btn-favorite:hover {
+            background: linear-gradient(135deg, #c53030, #9b2c2c);
+            color: white;
+        }
+        
+        .btn-favorite.active {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+        }
+        
+        .btn-favorite.active:hover {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+            color: white;
+        }
     </style>
 {% endblock %}
 
 {% block body %}
-    <!-- Header de la bibliothèque -->
     <section class="library-header">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <h1>{{ title }}</h1>
-                    <p class="lead mb-4">Découvrez notre collection complète de {{ totalFilms }} films</p>
+                    <p class="lead mb-4">Découvrez notre collection complète de films{% if totalFilms is defined %} ({{ totalFilms }} films){% endif %}</p>
                     {% if message %}
                         <div class="alert alert-warning">{{ message }}</div>
                     {% endif %}
@@ -164,7 +205,6 @@
     </section>
 
     <div class="container">
-        <!-- Filtres et recherche -->
         <section class="filters-section">
             <form method="get" class="row align-items-center">
                 <div class="col-md-6">
@@ -199,7 +239,6 @@
             </form>
         </section>
 
-        <!-- Liste des films -->
         <div class="row" id="moviesContainer">
             {% if films|length > 0 %}
                 {% for film in films %}
@@ -226,7 +265,6 @@
                                 <span>{{ film.duree }}</span>
                             </div>
                             
-                            <!-- Affichage des genres multiples -->
                             <div class="mb-2">
                                 {% set film_genres = film.genre|split(', ') %}
                                 {% for genre in film_genres %}
@@ -251,16 +289,28 @@
                             
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="film-price">{{ film.prix_location_par_default }}€</div>
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-primary" 
+                                <div class="film-actions">
+                                    {% if film.is_favorite is defined %}
+                                    <button class="btn btn-favorite {{ film.is_favorite ? 'active' : '' }}"
+                                            data-film-id="{{ film.id }}"
+                                            data-film-title="{{ film.titre }}"
+                                            title="{{ film.is_favorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}">
+                                        <i class="{{ film.is_favorite ? 'fas fa-check' : 'fas fa-heart' }}"></i>
+                                    </button>
+                                    {% endif %}
+                                    
+                                    <button class="btn btn-primary" 
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#filmModal{{ film.id }}">
+                                            data-bs-target="#filmModal{{ film.id }}"
+                                            title="Plus d'informations">
                                         <i class="fas fa-info-circle"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-success add-to-cart"
+                                    
+                                    <button class="btn btn-success add-to-cart"
                                             data-film="{{ film.titre }}"
                                             data-price="{{ film.prix_location_par_default }}"
-                                            data-film-id="{{ film.id }}">
+                                            data-film-id="{{ film.id }}"
+                                            title="Ajouter au panier">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
                                 </div>
@@ -268,7 +318,6 @@
                         </div>
                     </div>
                     
-                    <!-- Modal pour plus d'infos -->
                     <div class="modal fade" id="filmModal{{ film.id }}" tabindex="-1">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content bg-dark text-white">
@@ -314,8 +363,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal-footer border-secondary">
+                                <div class="modal-footer border-secondary d-flex gap-2">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                    
+                                    {% if film.is_favorite is defined %}
+                                    <button class="btn btn-favorite {{ film.is_favorite ? 'active' : '' }}"
+                                            data-film-id="{{ film.id }}"
+                                            data-film-title="{{ film.titre }}">
+                                        <i class="{{ film.is_favorite ? 'fas fa-check' : 'fas fa-heart' }} me-2"></i>
+                                        {{ film.is_favorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
+                                    </button>
+                                    {% endif %}
+                                    
                                     <button class="btn btn-primary add-to-cart"
                                             data-film="{{ film.titre }}"
                                             data-price="{{ film.prix_location_par_default }}"
@@ -352,42 +411,27 @@
     {{ parent() }}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Ajout au panier
+            console.log('Page chargée - Utilisateur connecté: {{ app.user ? "OUI" : "NON" }}');
+            
             document.querySelectorAll('.add-to-cart').forEach(button => {
                 button.addEventListener('click', function() {
                     const filmTitle = this.getAttribute('data-film');
                     const filmPrice = this.getAttribute('data-price');
                     const filmId = this.getAttribute('data-film-id');
                     
-                    // Mettre à jour le compteur du panier
                     const cartBadge = document.querySelector('.badge.bg-danger');
                     if (cartBadge) {
                         let currentCount = parseInt(cartBadge.textContent) || 0;
                         cartBadge.textContent = currentCount + 1;
                         
-                        // Animation
                         cartBadge.style.transform = 'scale(1.5)';
                         setTimeout(() => {
                             cartBadge.style.transform = 'scale(1)';
                         }, 300);
                     }
                     
-                    // Notification
-                    const notification = document.createElement('div');
-                    notification.className = 'alert alert-success position-fixed';
-                    notification.style.cssText = 'top: 20px; right: 20px; z-index: 1050;';
-                    notification.innerHTML = `
-                        <i class="fas fa-check-circle me-2"></i>
-                        "${filmTitle}" ajouté au panier (${filmPrice}€)
-                    `;
+                    showNotification(`"${filmTitle}" ajouté au panier (${filmPrice}€)`, 'success');
                     
-                    document.body.appendChild(notification);
-                    
-                    setTimeout(() => {
-                        notification.remove();
-                    }, 3000);
-                    
-                    // Animation du bouton
                     const originalHTML = this.innerHTML;
                     this.innerHTML = '<i class="fas fa-check"></i> Ajouté';
                     this.classList.remove('btn-success', 'btn-primary');
@@ -396,20 +440,173 @@
                     setTimeout(() => {
                         this.innerHTML = originalHTML;
                         this.classList.remove('btn-secondary');
-                        this.classList.add(this.getAttribute('class').includes('btn-outline') ? 'btn-outline-primary' : 'btn-success');
+                        this.classList.add(this.classList.contains('btn-outline') ? 'btn-outline-primary' : 'btn-success');
                     }, 2000);
-                    
-                    // Envoyer la requête au serveur (pour plus tard)
-                    /*
-                    fetch('/panier/ajouter/' + filmId, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    });
-                    */
                 });
             });
+            
+            document.querySelectorAll('.btn-favorite').forEach(button => {
+                button.addEventListener('click', async function() {
+                    const filmId = this.getAttribute('data-film-id');
+                    const filmTitle = this.getAttribute('data-film-title');
+                    const icon = this.querySelector('i');
+                    
+                    console.log('Clic sur favoris - Film ID:', filmId, 'Titre:', filmTitle);
+                    console.log('Utilisateur connecté:', {{ app.user ? 'true' : 'false' }});
+                    
+                    {% if app.user %}
+                        console.log('Email utilisateur:', '{{ app.user.email|default("non défini") }}');
+                        
+                        const isCurrentlyFavorite = this.classList.contains('active');
+                        console.log('État actuel:', isCurrentlyFavorite ? 'favori' : 'non favori');
+                        
+                        const newIsFavorite = !isCurrentlyFavorite;
+                        
+                        if (newIsFavorite) {
+                            this.classList.add('active');
+                            icon.className = 'fas fa-check';
+                            this.title = 'Retirer des favoris';
+                        } else {
+                            this.classList.remove('active');
+                            icon.className = 'fas fa-heart';
+                            this.title = 'Ajouter aux favoris';
+                        }
+                        
+                        updateAllFavoriteButtons(filmId, newIsFavorite);
+                        
+                        try {
+                            console.log('Envoi requête AJAX...');
+                            
+                            const response = await fetch('/films/favoris/toggle/' + filmId, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                },
+                                credentials: 'same-origin'
+                            });
+                            
+                            console.log('Réponse reçue - Statut:', response.status);
+                            
+                            if (response.ok) {
+                                const data = await response.json();
+                                console.log('Données reçues:', data);
+                                
+                                if (data.success) {
+                                    const message = data.action === 'added' 
+                                        ? `"${filmTitle}" ajouté à vos favoris` 
+                                        : `"${filmTitle}" retiré de vos favoris`;
+                                    const type = data.action === 'added' ? 'success' : 'info';
+                                    showNotification(message, type);
+                                    
+                                    console.log('Opération réussie:', data.action);
+                                } else {
+                                    console.error('Erreur côté serveur:', data.error);
+                                    updateAllFavoriteButtons(filmId, isCurrentlyFavorite);
+                                    showNotification('Erreur: ' + (data.error || 'Opération échouée'), 'danger');
+                                }
+                            } else {
+                                console.error('Erreur HTTP:', response.status);
+                                try {
+                                    console.log('Essai de la route session...');
+                                    const sessionResponse = await fetch('/films/favoris/session/toggle/' + filmId, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-Requested-With': 'XMLHttpRequest'
+                                        },
+                                        credentials: 'same-origin'
+                                    });
+                                    
+                                    if (sessionResponse.ok) {
+                                        const sessionData = await sessionResponse.json();
+                                        if (sessionData.success) {
+                                            const message = sessionData.action === 'added' 
+                                                ? `"${filmTitle}" ajouté à vos favoris (session)` 
+                                                : `"${filmTitle}" retiré de vos favoris (session)`;
+                                            const type = sessionData.action === 'added' ? 'success' : 'info';
+                                            showNotification(message, type);
+                                            
+                                            console.log('Opération réussie (session):', sessionData.action);
+                                        } else {
+                                            throw new Error(sessionData.error || 'Erreur session');
+                                        }
+                                    } else {
+                                        throw new Error(`Erreur session HTTP: ${sessionResponse.status}`);
+                                    }
+                                } catch (sessionError) {
+                                    console.error('Erreur session:', sessionError);
+                                    updateAllFavoriteButtons(filmId, isCurrentlyFavorite);
+                                    showNotification('Erreur de connexion. Veuillez réessayer.', 'danger');
+                                }
+                            }
+                            
+                        } catch (error) {
+                            console.error('Erreur lors de la requête:', error);
+                            updateAllFavoriteButtons(filmId, isCurrentlyFavorite);
+                            showNotification('Erreur de connexion. Veuillez réessayer.', 'danger');
+                        }
+                        
+                    {% else %}
+                        console.log('Utilisateur non connecté - redirection vers login');
+                        showNotification('Connectez-vous pour gérer vos favoris', 'warning');
+                        setTimeout(() => {
+                            window.location.href = '{{ path("app_login") }}?redirect={{ app.request.requestUri|url_encode }}';
+                        }, 1500);
+                    {% endif %}
+                });
+            });
+            
+            function updateAllFavoriteButtons(filmId, isFavorite) {
+                document.querySelectorAll(`.btn-favorite[data-film-id="${filmId}"]`).forEach(btn => {
+                    const btnIcon = btn.querySelector('i');
+                    if (isFavorite) {
+                        btn.classList.add('active');
+                        btnIcon.className = 'fas fa-check';
+                        btn.title = 'Retirer des favoris';
+                        const textSpan = btn.querySelector('.fa-heart + .me-2')?.nextSibling;
+                        if (textSpan && textSpan.nodeType === Node.TEXT_NODE) {
+                            textSpan.textContent = 'Retirer des favoris';
+                        }
+                    } else {
+                        btn.classList.remove('active');
+                        btnIcon.className = 'fas fa-heart';
+                        btn.title = 'Ajouter aux favoris';
+                        const textSpan = btn.querySelector('.fa-check + .me-2')?.nextSibling;
+                        if (textSpan && textSpan.nodeType === Node.TEXT_NODE) {
+                            textSpan.textContent = 'Ajouter aux favoris';
+                        }
+                    }
+                });
+            }
+            
+            function showNotification(message, type = 'info') {
+                document.querySelectorAll('.ajax-notification').forEach(notification => {
+                    notification.remove();
+                });
+                
+                let icon = 'info-circle';
+                if (type === 'success') icon = 'check-circle';
+                if (type === 'warning') icon = 'exclamation-triangle';
+                if (type === 'danger') icon = 'exclamation-circle';
+                
+                const notification = document.createElement('div');
+                notification.className = `alert alert-${type} alert-dismissible fade show ajax-notification`;
+                notification.innerHTML = `
+                    <i class="fas fa-${icon} me-2"></i>
+                    ${message}
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        const bsAlert = new bootstrap.Alert(notification);
+                        bsAlert.close();
+                    }
+                }, 5000);
+            }
         });
     </script>
 {% endblock %}

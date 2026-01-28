@@ -219,12 +219,6 @@
                                     {% endfor %}
                                     <small class="ms-2">{{ movie.rating|number_format(1) }}</small>
                                 </div>
-                                <button class="btn btn-sm btn-primary add-to-cart" 
-                                        data-movie-id="{{ movie.id }}"
-                                        data-movie="{{ movie.title }}"
-                                        data-price="{{ movie.price }}">
-                                    <i class="fas fa-cart-plus me-1"></i>Ajouter
-                                </button>
                             </div>
                         </div>
                     </div>

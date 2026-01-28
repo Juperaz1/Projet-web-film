@@ -51,7 +51,7 @@
         }
         
         .navbar {
-            background-color: rgba(10, 10, 10, 0.98) ;
+            background-color: rgba(10, 10, 10, 0.98);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(102, 126, 234, 0.1);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
@@ -74,9 +74,9 @@
         }
         
         .nav-link {
-            color: rgba(255, 255, 255, 0.8) ;
+            color: rgba(255, 255, 255, 0.8);
             font-weight: 500;
-            padding: 0.5rem 1rem ;
+            padding: 0.5rem 1rem;
             border-radius: 8px;
             margin: 0 0.2rem;
             transition: all 0.3s ease;
@@ -84,7 +84,7 @@
         
         .nav-link:hover,
         .nav-link.active {
-            color: white ;
+            color: white;
             background: rgba(102, 126, 234, 0.1);
             transform: translateY(-2px);
         }
@@ -192,7 +192,7 @@
             background: linear-gradient(135deg, var(--darker-color), #111111);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             margin-top: auto;
-            padding: 1rem 0 0.75rem;
+            padding: 3rem 0 1.5rem;
         }
         
         footer h5, footer h6 {
@@ -450,6 +450,11 @@
                         &copy; {{ "now"|date("Y") }} SiteFilm. Tous droits réservés.
                     </p>
                 </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-muted me-3">Mentions légales</a>
+                    <a href="#" class="text-muted me-3">Confidentialité</a>
+                    <a href="#" class="text-muted">Conditions d'utilisation</a>
+                </div>
             </div>
         </div>
     </footer>
@@ -628,13 +633,15 @@
                 card.classList.add('animate__animated', 'animate__fadeInUp');
             });
             
-            // Animation du bouton panier au clic
-            document.querySelector('.cart-btn').addEventListener('click', function(e) {
-                this.style.transform = 'scale(1.1)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 300);
-            });
+            const cartBtn = document.querySelector('.cart-btn');
+            if (cartBtn) {
+                cartBtn.addEventListener('click', function(e) {
+                    this.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 300);
+                });
+            }
         });
         
         const style = document.createElement('style');

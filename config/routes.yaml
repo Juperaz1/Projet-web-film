@@ -9,6 +9,26 @@ app_movies:
     controller: App\Controller\MovieController::index
     methods: GET
 
+app_movies_toggle_favorite:
+    path: /films/favoris/toggle/{id}
+    controller: App\Controller\MovieController::toggleFavorite
+    methods: POST
+
+app_movies_toggle_favorite_session:
+    path: /films/favoris/session/toggle/{id}
+    controller: App\Controller\MovieController::toggleFavoriteSession
+    methods: POST
+
+app_test_auth:
+    path: /api/test-auth
+    controller: App\Controller\MovieController::testAuth
+    methods: GET
+
+api_film_favorite:
+    path: /api/films/{id}/favorite
+    controller: App\Controller\MovieController::apiToggleFavorite
+    methods: POST
+
 app_profile:
     path: /profile
     controller: App\Controller\ProfileController::index
@@ -74,7 +94,7 @@ admin_film_delete:
         id: '\d+'
 
 # Import automatique des routes des contrôleurs avec attributs
-controllers:
-    resource: ../src/Controller/
-    type: attribute
-    prefix: /
+#controllers:
+#    resource: ../src/Controller/
+#    type: attribute
+#    prefix: /

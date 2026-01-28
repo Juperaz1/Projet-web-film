@@ -35,7 +35,6 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $password = $request->request->get('password', '');
         $csrfToken = $request->request->get('_csrf_token', '');
 
-        // Stocke l'email dans la session pour AuthenticationUtils
         $request->getSession()->set('_security.last_username', $email);
 
         return new Passport(
