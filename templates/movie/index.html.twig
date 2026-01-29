@@ -186,6 +186,50 @@
             background: linear-gradient(135deg, #38a169, #2f855a);
             color: white;
         }
+        
+        .pagination .page-link {
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e0;
+            margin: 0 2px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .pagination .page-link:hover {
+            background-color: rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.5);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .pagination .page-item.active .page-link,
+        .pagination .pagination-active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-color: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .pagination .page-item.disabled .page-link {
+            background-color: rgba(30, 30, 30, 0.4);
+            border-color: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+            cursor: not-allowed;
+        }
+        
+        .pagination-info {
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+        
+        .pagination .page-item.disabled span.page-link {
+            background-color: transparent;
+            border: none;
+            color: #a0aec0;
+        }
     </style>
 {% endblock %}
 
@@ -207,6 +251,7 @@
     <div class="container">
         <section class="filters-section">
             <form method="get" class="row align-items-center">
+                <input type="hidden" name="page" value="1">
                 <div class="col-md-6">
                     <div class="input-group">
                         <input type="text" 
@@ -404,6 +449,60 @@
                 </div>
             {% endif %}
         </div>
+        {% if films|length > 0 and pagination is defined %}
+            <div class="row mt-5">
+                <div class="col-12">
+                    <nav aria-label="Pagination des films" class="d-flex justify-content-center">
+                        <ul class="pagination">
+                            <li class="page-item {{ pagination.currentPageNumber == 1 ? 'disabled' : '' }}">
+                                <a class="page-link" href="{{ path('app_movies', {'page': pagination.currentPageNumber - 1, 'search': searchTerm, 'genre': selectedGenre}) }}" aria-label="Précédent">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>                            
+                            {% set startPage = max(1, pagination.currentPageNumber - 2) %}
+                            {% set endPage = min(pagination.pageCount, startPage + 4) %}
+                            {% if startPage > 1 %}
+                                <li class="page-item">
+                                    <a class="page-link" 
+                                       href="{{ path('app_movies', {'page': 1, 'search': searchTerm, 'genre': selectedGenre}) }}">1</a>
+                                </li>
+                                {% if startPage > 2 %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                            {% for page in startPage..endPage %}
+                                <li class="page-item {{ pagination.currentPageNumber == page ? 'active' : '' }}">
+                                    <a class="page-link {{ pagination.currentPageNumber == page ? 'pagination-active' : '' }}"href="{{ path('app_movies', {'page': page, 'search': searchTerm, 'genre': selectedGenre}) }}">{{ page }}</a>
+                                </li>
+                            {% endfor %}
+                            {% if endPage < pagination.pageCount %}
+                                {% if endPage < pagination.pageCount - 1 %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                {% endif %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ path('app_movies', {'page': pagination.pageCount, 'search': searchTerm, 'genre': selectedGenre}) }}">{{ pagination.pageCount }}</a>
+                                </li>
+                            {% endif %}                            
+                            <li class="page-item {{ pagination.currentPageNumber == pagination.pageCount ? 'disabled' : '' }}">
+                                <a class="page-link"
+                                   href="{{ path('app_movies', {'page': pagination.currentPageNumber + 1, 'search': searchTerm,'genre': selectedGenre}) }}" aria-label="Suivant">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>                    
+                    <div class="text-center mt-3 pagination-info">
+                        <small>
+                            Page {{ pagination.currentPageNumber }} sur {{ pagination.pageCount }} | {{ pagination|length }} film(s) sur cette page | {{ pagination.totalItemCount }} film(s) au total
+                        </small>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 

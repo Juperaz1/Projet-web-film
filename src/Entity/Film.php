@@ -147,12 +147,24 @@ class Film
 
     public function getFullAfficheUrl(): string
     {
-        if($this->cheminAffiche && str_starts_with($this->cheminAffiche, 'http'))
+        if(!$this->cheminAffiche)
+        {
+            $defaultColor = substr(md5($this->titre), 0, 6);
+            return sprintf('https://via.placeholder.com/300x450/%s/ffffff?text=%s', $defaultColor, urlencode(substr($this->titre, 0, 20)));
+        }
+        if(str_starts_with($this->cheminAffiche, 'http'))
         {
             return $this->cheminAffiche;
         }
-        $defaultColor = substr(md5($this->titre), 0, 6);
-        return sprintf('https://via.placeholder.com/300x450/%s/ffffff?text=%s', $defaultColor, urlencode(substr($this->titre, 0, 20)));
+        if(str_starts_with($this->cheminAffiche, '/images/'))
+        {
+            return $this->cheminAffiche;
+        }
+        if(!str_starts_with($this->cheminAffiche, '/'))
+        {
+            return '/images/films/' . $this->cheminAffiche;
+        }
+        return $this->cheminAffiche;
     }
 
     public function getGenresAsString(): string

@@ -11,36 +11,55 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 class MovieController extends AbstractController
 {
     #[Route('/films', name: 'app_movies')]
-    public function index(Request $request, FilmRepository $filmRepository, FavorisRepository $favorisRepository): Response
+    public function index(Request $request, FilmRepository $filmRepository, FavorisRepository $favorisRepository, PaginatorInterface $paginator): Response
     {
         try
         {
-            $films = $filmRepository->findAllWithGenres();
-            if(empty($films))
+            $queryBuilder = $filmRepository->createQueryBuilder('f')->leftJoin('f.genres', 'g')->addSelect('g')->orderBy('f.titre', 'ASC');
+            $allGenres = $filmRepository->findAllGenres();
+            $searchTerm = $request->query->get('search', '');
+            $selectedGenre = $request->query->get('genre', '');
+            if($searchTerm)
+            {
+                $queryBuilder->andWhere('f.titre LIKE :searchTerm OR f.synopsis LIKE :searchTerm')->setParameter('searchTerm', '%' . $searchTerm . '%');
+            }
+            if($selectedGenre)
+            {
+                $queryBuilder->andWhere('g.libelleGenre = :genre')->setParameter('genre', $selectedGenre);
+            }
+            $pagination = $paginator->paginate($queryBuilder->getQuery(), $request->query->getInt('page', 1),12);            
+            if($pagination->count() === 0)
             {
                 return $this->render('movie/index.html.twig', [
                     'films' => [],
                     'title' => 'Notre Bibliothèque de Films',
                     'totalFilms' => 0,
-                    'genres' => [],
-                    'searchTerm' => '',
-                    'selectedGenre' => '',
-                    'message' => 'La base de données est vide. Veuillez ajouter des films.',
-                    'favoriteCount' => 0
+                    'genres' => $allGenres,
+                    'searchTerm' => $searchTerm,
+                    'selectedGenre' => $selectedGenre,
+                    'message' => 'Aucun film trouvé avec ces critères de recherche.',
+                    'favoriteCount' => 0,
+                    'pagination' => $pagination
                 ]);
             }
             $user = $this->getUser();
             $formattedFilms = [];
-            foreach ($films as $film) {
+            foreach($pagination as $film)
+            {
                 $isFavorite = false;
-                if ($user) {
-                    try {
+                if($user)
+                {
+                    try
+                    {
                         $isFavorite = $favorisRepository->isFilmInFavoris($user, $film);
-                    } catch (\Exception $e) {
+                    }
+                    catch(\Exception $e)
+                    {
                         $isFavorite = false;
                     }
                 }
@@ -60,51 +79,25 @@ class MovieController extends AbstractController
                     'is_favorite' => $isFavorite
                 ];
             }
-            $allGenres = $filmRepository->findAllGenres();
-            $searchTerm = $request->query->get('search', '');
-            $selectedGenre = $request->query->get('genre', '');
-            if ($searchTerm || $selectedGenre) {
-                $formattedFilms = array_filter($formattedFilms, function($film) use ($searchTerm, $selectedGenre) {
-                    $match = true;
-
-                    if ($searchTerm) {
-                        $match = $match && (stripos($film['titre'], $searchTerm) !== false ||
-                                           stripos($film['synopsis'], $searchTerm) !== false);
-                    }
-
-                    if ($selectedGenre) {
-                        $hasGenre = false;
-                        foreach ($film['genres_array'] as $genre) {
-                            if ($genre->getLibelleGenre() === $selectedGenre) {
-                                $hasGenre = true;
-                                break;
-                            }
-                        }
-                        $match = $match && $hasGenre;
-                    }
-
-                    return $match;
-                });
-
-                $formattedFilms = array_values($formattedFilms);
-            }
             $favoriteCount = 0;
-            if ($user) {
+            if($user)
+            {
                 $favoriteCount = $favorisRepository->countUserFavorites($user);
             }
-
             return $this->render('movie/index.html.twig', [
                 'films' => $formattedFilms,
                 'title' => 'Notre Bibliothèque de Films',
-                'totalFilms' => count($formattedFilms),
+                'totalFilms' => $pagination->getTotalItemCount(),
                 'genres' => $allGenres,
                 'searchTerm' => $searchTerm,
                 'selectedGenre' => $selectedGenre,
                 'message' => null,
-                'favoriteCount' => $favoriteCount
+                'favoriteCount' => $favoriteCount,
+                'pagination' => $pagination
             ]);
-
-        } catch (\Exception $e) {
+        }
+        catch(\Exception $e)
+        {
             return $this->render('movie/index.html.twig', [
                 'films' => [],
                 'title' => 'Notre Bibliothèque de Films',
@@ -113,7 +106,8 @@ class MovieController extends AbstractController
                 'searchTerm' => '',
                 'selectedGenre' => '',
                 'message' => 'Erreur: ' . $e->getMessage(),
-                'favoriteCount' => 0
+                'favoriteCount' => 0,
+                'pagination' => null
             ]);
         }
     }
