@@ -199,7 +199,7 @@
         
         {% if popularMovies|length > 0 %}
             <div class="row">
-                {% for movie in popularMovies|slice(0, 4) %}
+                {% for movie in popularMovies|slice(0, 8) %}
                 <div class="col-lg-3 col-md-6 mb-4">
                     <div class="movie-card">
                         <img src="{{ movie.image }}" alt="{{ movie.title }}" 

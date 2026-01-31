@@ -12,7 +12,7 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(FilmRepository $filmRepository): Response
     {
-        $popularFilms = $filmRepository->findByHighestRating(5);
+        $popularFilms = $filmRepository->findByHighestRating(8);
         $formattedMovies = [];
         foreach ($popularFilms as $film) {
             $formattedMovies[] = [

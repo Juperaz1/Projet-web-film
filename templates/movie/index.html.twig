@@ -46,16 +46,36 @@
             border-color: rgba(102, 126, 234, 0.4);
         }
         
-        .film-poster {
+        .film-poster-container {
             width: 100%;
             height: 350px;
-            object-fit: cover;
             background: #1a202c;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #667eea;
             font-size: 4rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .film-poster-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s ease;
+        }
+
+        .film-card:hover .film-poster-img {
+            transform: scale(1.05);
+        }
+
+        /* Mettez aussi à jour la version mobile */
+        @media (max-width: 768px) {
+            .film-poster-container {
+                height: 250px;
+            }
         }
         
         .film-badge {
@@ -423,8 +443,8 @@
                         {% endif %}
                         
                         
-                        <div class="film-poster">
-                            <img src="{{ film.chemin_affiche }}" alt="{{ film.titre }}" class="img-fluid">
+                        <div class="film-poster-container">
+                            <img src="{{ film.chemin_affiche }}" alt="{{ film.titre }}" class="film-poster-img">
                         </div>
                         
                         <div class="film-content">
@@ -512,8 +532,8 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="film-poster mb-3">
-                                                <img src="{{ film.chemin_affiche }}" alt="{{ film.titre }}" class="img-fluid rounded">
+                                            <div class="film-poster-container mb-3">
+                                                <img src="{{ film.chemin_affiche }}" alt="{{ film.titre }}" class="film-poster-img rounded">
                                             </div>
                                             <div class="text-center mb-3">
                                                 {% if film.reduction_pourcentage > 0 %}

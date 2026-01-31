@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db:3306
--- Généré le : jeu. 29 jan. 2026 à 11:34
+-- Généré le : sam. 31 jan. 2026 à 20:15
 -- Version du serveur : 11.8.5-MariaDB-ubu2404
 -- Version de PHP : 8.3.26
 
@@ -72,13 +72,13 @@ INSERT INTO `FILMS` (`IdFilm`, `Titre`, `Annee`, `Duree`, `Synopsis`, `PrixLocat
 (14, 'Die Hard', 1988, 132, 'Un policier de New York tente de sauver sa femme lors d\'une prise d\'otages dans un gratte-ciel de Los Angeles.', 2.99, '/images/die_hard.jpg', 4.5),
 (15, 'Mission: Impossible', 1996, 110, 'Un agent du IMF est accusé de trahison et doit découvrir le véritable traître.', 3.25, '/images/mission_impossible.jpg', 4.2),
 (16, 'The Matrix', 1999, 136, 'Un hacker découvre que sa réalité est une simulation créée par des machines intelligentes.', 4.00, '/images/the_matrix.jpg', 4.8),
-(17, 'Terminator 2: Judgment Day', 1991, 137, 'Un cyborg est envoyé du futur pour protéger un jeune garçon d\'un autre cyborg plus avancé.', 3.80, '/images/terminator_2_judgment_day.jpg', 4.7),
+(17, 'Terminator 2: Le jugement dernier', 1991, 137, 'Un cyborg est envoyé du futur pour protéger un jeune garçon d\'un autre cyborg plus avancé.', 3.80, '/images/terminator_2_judgment_day.jpg', 4.7),
 (18, 'Indiana Jones et les Aventuriers de l\'Arche perdue', 1981, 115, 'Un archéologue aventurier tente de mettre la main sur l\'Arche d\'Alliance avant les nazis.', 3.50, '/images/indiana_jones_et_les_aventuriers_de_l_arche_perdue.jpg', 4.6),
-(19, 'Guardians of the Galaxy', 2014, 121, 'Un groupe de criminels intergalactiques doivent s\'unir pour sauver la galaxie.', 4.10, '/images/guardians_of_the_galaxy.jpg', 4.5),
+(19, 'Les gardiens de la galaxie', 2014, 121, 'Un groupe de criminels intergalactiques doivent s\'unir pour sauver la galaxie.', 4.10, '/images/guardians_of_the_galaxy.jpg', 4.5),
 (20, 'Spider-Man: Into the Spider-Verse', 2018, 117, 'Un adolescent devient Spider-Man et rencontre d\'autres versions de lui-même d\'autres dimensions.', 4.30, '/images/spider_man_into_the_spider_verse.jpg', 4.9),
 (21, 'The Social Network', 2010, 120, 'L\'histoire de la création de Facebook et des conflits qui ont suivi.', 3.65, '/images/the_social_network.jpg', 4.4),
 (22, 'Le Discours d\'un Roi', 2010, 118, 'L\'histoire du roi George VI qui surmonte son bégaiement avec l\'aide d\'un orthophoniste.', 3.40, '/images/le_discours_d_un_roi.jpg', 4.5),
-(23, 'Green Book', 2018, 130, 'Un videur italo-américain sert de chauffeur à un pianiste afro-américain lors d\'une tournée dans le Sud en 1962.', 3.90, '/images/green_book.jpg', 4.6),
+(23, 'Le livre de Green', 2018, 130, 'Un videur italo-américain sert de chauffeur à un pianiste afro-américain lors d\'une tournée dans le Sud en 1962.', 3.90, '/images/green_book.jpg', 4.6),
 (24, 'Dunkerque', 2017, 106, 'Des soldats alliés sont piégés sur la plage de Dunkerque pendant la Seconde Guerre mondiale.', 3.75, '/images/dunkerque.jpg', 4.3),
 (25, 'Le Labyrinthe de Pan', 2006, 118, 'En 1944, une jeune fille découvre un monde fantastique tout en vivant sous le régime franquiste.', 3.60, '/images/le_labyrinthe_de_pan.jpg', 4.7),
 (26, 'Slumdog Millionaire', 2008, 120, 'Un jeune homme des bidonvilles de Mumbai participe à Qui veut gagner des millions ? et est accusé de tricherie.', 3.45, '/images/slumdog_millionaire.jpg', 4.5),
@@ -111,7 +111,7 @@ INSERT INTO `FILMS` (`IdFilm`, `Titre`, `Annee`, `Duree`, `Synopsis`, `PrixLocat
 (53, 'Gone Girl', 2014, 149, 'Un homme devient le principal suspect lorsque sa femme disparaît le jour de leur anniversaire de mariage.', 4.10, '/images/gone_girl.jpg', 4.5),
 (54, 'Shutter Island', 2010, 138, 'Deux marshals enquêtent sur la disparition d\'un meurtrier dans un hôpital psychiatrique sur une île.', 3.95, '/images/shutter_island.jpg', 4.6),
 (55, 'Memento', 2000, 113, 'Un homme souffrant d\'amnésie antérograde tente de retrouver le meurtrier de sa femme.', 3.70, '/images/memento.jpg', 4.8),
-(56, 'The Departed', 2006, 151, 'Un policier infiltré et un indic dans la police tentent de s\'identifier mutuellement.', 4.00, '/images/the_departed.jpg', 4.7),
+(56, 'Les infiltrés', 2006, 151, 'Un policier infiltré et un indic dans la police tentent de s\'identifier mutuellement.', 4.00, '/images/the_departed.jpg', 4.7),
 (57, 'L.A. Confidential', 1997, 138, 'Trois policiers de Los Angeles enquêtent sur une série de meurtres dans les années 1950.', 3.65, '/images/l_a_confidential.jpg', 4.6),
 (58, 'Heat', 1995, 170, 'Un détective traque un voleur professionnel déterminé lors d\'une dernière opération.', 3.80, '/images/heat.jpg', 4.7),
 (59, 'Oldboy', 2003, 120, 'Un homme est séquestré pendant 15 ans sans explication, puis libéré et doit trouver son geôlier.', 4.15, '/images/oldboy.jpg', 4.8),
@@ -126,7 +126,7 @@ INSERT INTO `FILMS` (`IdFilm`, `Titre`, `Annee`, `Duree`, `Synopsis`, `PrixLocat
 (68, 'Shrek', 2001, 90, 'Un ogre solitaire voit sa marécage envahi par des personnages de contes de fées déportés.', 3.40, '/images/shrek.jpg', 4.6),
 (69, 'Wall-E', 2008, 98, 'Dans un futur lointain, un petit robot nettoie une Terre déserte et tombe amoureux.', 3.85, '/images/wall_e.jpg', 4.8),
 (70, 'Le Tombeau des lucioles', 1988, 89, 'Un jeune garçon et sa petite sœur luttent pour survivre au Japon pendant la Seconde Guerre mondiale.', 3.50, '/images/le_tombeau_des_lucioles.jpg', 4.9),
-(71, 'Schindler\'s List', 1993, 195, 'Un homme d\'affaires allemand sauve plus de mille réfugiés juifs pendant l\'Holocauste.', 4.00, '/images/schindler_s_list.jpg', 4.9),
+(71, 'La liste de Schindler', 1993, 195, 'Un homme d\'affaires allemand sauve plus de mille réfugiés juifs pendant l\'Holocauste.', 4.00, '/images/schindler_s_list.jpg', 4.9),
 (72, 'Le Dernier Samouraï', 2003, 154, 'Un capitaine de l\'armée américaine est capturé par des samouraïs au Japon de l\'ère Meiji.', 3.75, '/images/le_dernier_samourai.jpg', 4.3),
 (73, 'Braveheart', 1995, 178, 'William Wallace mène une révolte écossaise contre le roi d\'Angleterre Édouard Ier.', 3.85, '/images/braveheart.jpg', 4.5),
 (74, 'Le Dernier Empereur', 1987, 163, 'La vie de Puyi, le dernier empereur de Chine, de son ascension à son déclin.', 3.60, '/images/le_dernier_empereur.jpg', 4.4),
@@ -143,8 +143,8 @@ INSERT INTO `FILMS` (`IdFilm`, `Titre`, `Annee`, `Duree`, `Synopsis`, `PrixLocat
 (85, 'A Quiet Place', 2018, 90, 'Une famille doit vivre en silence pour éviter des créatures qui chassent au son.', 4.00, '/images/a_quiet_place.jpg', 4.5),
 (86, 'The Conjuring', 2013, 112, 'Des enquêteurs paranormaux aident une famille hantée par une présence maléfique dans leur ferme.', 3.90, '/images/the_conjuring.jpg', 4.5),
 (87, 'Psycho', 1960, 109, 'Une secrétaire vole de l\'argent et se réfugie dans un motel isolé géré par un homme étrange.', 3.30, '/images/psycho.jpg', 4.7),
-(88, 'The Babadook', 2014, 93, 'Une mère veuve et son fils sont hantés par une créature d\'un livre d\'images.', 3.70, '/images/the_babadook.jpg', 4.5),
-(89, 'It', 2017, 135, 'Des enfants affrontent un clown maléfique qui se nourrit de leurs peurs.', 4.20, '/images/it.jpg', 4.6),
+(88, 'Mister Babadook', 2014, 93, 'Une mère veuve et son fils sont hantés par une créature d\'un livre d\'images.', 3.70, '/images/the_babadook.jpg', 4.5),
+(89, 'Ca', 2017, 135, 'Des enfants affrontent un clown maléfique qui se nourrit de leurs peurs.', 4.20, '/images/it.jpg', 4.6),
 (90, 'Scream', 1996, 111, 'Un tueur masqué terrorise un lycée en utilisant des références aux films d\'horreur.', 3.50, '/images/scream.jpg', 4.3),
 (91, 'Il était une fois dans l\'Ouest', 1968, 165, 'Des histoires s\'entrecroisent autour d\'un mystérieux étranger et d\'une veuve défendant son terrain.', 3.55, '/images/il_etait_une_fois_dans_l_ouest.jpg', 4.8),
 (92, 'Django Unchained', 2012, 165, 'Un chasseur de primes et un esclave affranchi traquent des criminels dans le Sud américain avant la guerre de Sécession.', 4.10, '/images/django_unchained.jpg', 4.6),
@@ -154,7 +154,7 @@ INSERT INTO `FILMS` (`IdFilm`, `Titre`, `Annee`, `Duree`, `Synopsis`, `PrixLocat
 (96, 'Butch Cassidy and the Sundance Kid', 1969, 110, 'Deux hors-la-loi du Far West fuient vers la Bolivie après une série de braquages.', 3.40, '/images/butch_cassidy_and_the_sundance_kid.jpg', 4.4),
 (97, 'Unforgiven', 1992, 130, 'Un ancien hors-la-loi reprend ses armes pour une dernière prime.', 3.70, '/images/unforgiven.jpg', 4.7),
 (98, 'The Revenant', 2015, 156, 'Un trappeur est laissé pour mort par ses compagnons et survit pour se venger.', 4.15, '/images/the_revenant.jpg', 4.5),
-(99, '3:10 to Yuma', 2007, 122, 'Un propriétaire terrien appauvri accepte d\'escorter un célèbre hors-la-loi jusqu\'au train pour Yuma.', 3.60, '/images/3_10_to_yuma.jpg', 4.2),
+(99, '3:10 pour Yuma', 2007, 122, 'Un propriétaire terrien appauvri accepte d\'escorter un célèbre hors-la-loi jusqu\'au train pour Yuma.', 3.60, '/images/3_10_to_yuma.jpg', 4.2),
 (100, 'Titanic', 1997, 195, 'Une romance entre deux passagers de différentes classes sociales à bord du RMS Titanic.', 4.25, '/images/titanic.jpg', 4.8);
 
 -- --------------------------------------------------------
@@ -544,7 +544,7 @@ ALTER TABLE `UTILISATEURS`
 -- AUTO_INCREMENT pour la table `FAVORIS`
 --
 ALTER TABLE `FAVORIS`
-  MODIFY `IdFavori` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdFavori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `FILMS`
@@ -562,7 +562,7 @@ ALTER TABLE `GENRES`
 -- AUTO_INCREMENT pour la table `LOCATIONS`
 --
 ALTER TABLE `LOCATIONS`
-  MODIFY `IdLocation` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdLocation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `TARIFSDYNAMIQUES`

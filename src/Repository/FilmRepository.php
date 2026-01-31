@@ -54,7 +54,7 @@ class FilmRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('f')->andWhere('f.titre LIKE :term')->setParameter('term', '%' . $term . '%')->orderBy('f.titre', 'ASC')->getQuery()->getResult();
     }
 
-    public function findByHighestRating(int $limit = 5): array
+    public function findByHighestRating(int $limit = 8): array
     {
         return $this->createQueryBuilder('f')->andWhere('f.note IS NOT NULL')->orderBy('f.note', 'DESC')->setMaxResults($limit)->getQuery()->getResult();
     }
