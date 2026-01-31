@@ -18,9 +18,37 @@
             --accent-color: #e53e3e;
             --dark-color: #0a0a0a;
             --darker-color: #050505;
-            --light-color: #f7fafc;
+            --light-color: #ffffff;
             --gray-color: #2d3748;
             --success-color: #38a169;
+        }
+        
+        body, 
+        body *:not(i):not(.btn):not(.badge):not(.alert):not(.form-control):not(.dropdown-menu) {
+            color: var(--light-color) ;
+        }
+        
+        .text-muted {
+            color: rgba(255, 255, 255, 0.7) ;
+        }
+        
+        .text-dark {
+            color: var(--light-color) ;
+        }
+        
+        .text-black {
+            color: var(--light-color) ;
+        }
+        
+        .text-body {
+            color: var(--light-color) ;
+        }
+        
+        .table-dark,
+        .table-dark th,
+        .table-dark td,
+        .table-dark thead th {
+            color: var(--light-color) ;
         }
         
         body {
@@ -98,12 +126,14 @@
             letter-spacing: 0.5px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+            color: white ;
         }
         
         .btn-primary:hover {
             background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            color: white ;
         }
         
         .btn-outline-primary {
@@ -118,9 +148,27 @@
         
         .btn-outline-primary:hover {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
+            color: white ;
             border-color: transparent;
             transform: translateY(-2px);
+        }
+        
+        .btn-outline-secondary {
+            color: rgba(255, 255, 255, 0.8) ;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-outline-secondary:hover {
+            color: white ;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-success {
+            color: white ;
+        }
+        
+        .btn-warning {
+            color: #000 ;
         }
         
         .movie-card {
@@ -163,6 +211,7 @@
             font-weight: 700;
             margin-bottom: 0.5rem;
             font-size: 1.1rem;
+            color: white ;
         }
         
         .price-tag {
@@ -170,7 +219,7 @@
             top: 1rem;
             right: 1rem;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
+            color: white ;
             padding: 0.5rem 1.25rem;
             border-radius: 25px;
             font-weight: 700;
@@ -196,13 +245,13 @@
         }
         
         footer h5, footer h6 {
-            color: white;
+            color: white ;
             font-weight: 700;
             margin-bottom: 1.5rem;
         }
         
         footer a {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.7) ;
             text-decoration: none;
             transition: color 0.3s ease;
             display: inline-block;
@@ -210,39 +259,12 @@
         }
         
         footer a:hover {
-            color: var(--primary-color);
+            color: var(--primary-color) ;
             transform: translateX(5px);
         }
 
         footer .text-muted {
-            color: rgba(255, 255, 255, 0.7) !important;
-        }
-        
-        .cart-notification {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: rgba(20, 20, 20, 0.95);
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            display: none;
-            z-index: 9999;
-            backdrop-filter: blur(10px);
-            animation: slideIn 0.3s ease;
-            max-width: 350px;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            color: rgba(255, 255, 255, 0.7) ;
         }
         
         .badge {
@@ -251,20 +273,46 @@
             padding: 0.35em 0.65em;
         }
         
+        .badge-genre {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            text-decoration: none ;
+            display: inline-block;
+        }
+        
+        .badge-genre:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+            border-color: var(--primary-color);
+            text-decoration: none ;
+        }
+        
+        .badge-genre.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white ;
+            border-color: var(--primary-color);
+            text-decoration: none ;
+        }
+        
         .form-control {
             background-color: rgba(30, 30, 30, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
+            color: white ;
             padding: 0.75rem 1rem;
             border-radius: 10px;
             transition: all 0.3s ease;
+        }
+        
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5) ;
         }
         
         .form-control:focus {
             background-color: rgba(40, 40, 40, 0.9);
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            color: white;
+            color: white ;
         }
         
         .hero-section {
@@ -300,6 +348,130 @@
             -webkit-text-fill-color: transparent;
         }
         
+        .alert {
+            color: white ;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .alert-success {
+            background-color: rgba(56, 161, 105, 0.2);
+            border-color: rgba(56, 161, 105, 0.3);
+            color: #9ae6b4 ;
+        }
+        
+        .alert-warning {
+            background-color: rgba(237, 137, 54, 0.2);
+            border-color: rgba(237, 137, 54, 0.3);
+            color: #fbd38d ;
+        }
+        
+        .alert-info {
+            background-color: rgba(56, 178, 172, 0.2);
+            border-color: rgba(56, 178, 172, 0.3);
+            color: #81e6d9 ;
+        }
+        
+        .alert-danger {
+            background-color: rgba(229, 62, 62, 0.2);
+            border-color: rgba(229, 62, 62, 0.3);
+            color: #fc8181 ;
+        }
+        
+        .table-dark {
+            background-color: var(--darker-color);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .table-dark th {
+            border-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white ;
+        }
+        
+        .table-dark td {
+            border-color: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.9) ;
+        }
+        
+        .table-dark tbody tr:hover {
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+        
+        .card {
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white ;
+        }
+        
+        .card-header {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: white ;
+        }
+        
+        .card-body {
+            color: rgba(255, 255, 255, 0.9) ;
+        }
+        
+        .dropdown-menu {
+            background-color: rgba(30, 30, 30, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .dropdown-item {
+            color: rgba(255, 255, 255, 0.8) ;
+            transition: all 0.2s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(102, 126, 234, 0.1);
+            color: white ;
+        }
+        
+        .dropdown-item.text-danger {
+            color: #fc8181 ;
+        }
+        
+        .dropdown-item.text-danger:hover {
+            background-color: rgba(229, 62, 62, 0.1);
+            color: #feb2b2 ;
+        }
+        
+        .modal-content {
+            background-color: rgba(20, 20, 20, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white ;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .page-link {
+            background-color: rgba(30, 30, 30, 0.8);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8) ;
+        }
+        
+        .page-link:hover {
+            background-color: rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.5);
+            color: white ;
+        }
+        
+        .page-item.active .page-link {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-color: var(--primary-color);
+            color: white ;
+        }
+        
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
@@ -315,32 +487,6 @@
                 border-radius: 12px;
                 margin-top: 1rem;
                 border: 1px solid rgba(255, 255, 255, 0.05);
-            }
-
-            .table-dark {
-                background-color: var(--darker-color);
-                border-color: rgba(255, 255, 255, 0.1);
-            }
-
-            .table-dark th {
-                border-color: rgba(255, 255, 255, 0.1);
-                background-color: rgba(0, 0, 0, 0.3);
-            }
-
-            .table-dark td {
-                border-color: rgba(255, 255, 255, 0.05);
-            }
-
-            .alert {
-                border: 1px solid transparent;
-                border-radius: 10px;
-                backdrop-filter: blur(10px);
-            }
-
-            .alert-success {
-                background-color: rgba(56, 161, 105, 0.2);
-                border-color: rgba(56, 161, 105, 0.3);
-                color: #9ae6b4;
             }
         }
     </style>
@@ -384,7 +530,7 @@
                 </ul>
                 
                 <div class="d-flex align-items-center">
-                    <a href="#" class="btn btn-outline-primary position-relative me-3 cart-btn">
+                    <a href="{{ path('app_cart') }}" class="btn btn-outline-primary position-relative me-3">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             0
@@ -459,11 +605,6 @@
         </div>
     </footer>
 
-    <div id="cartNotification" class="cart-notification">
-        <i class="fas fa-check-circle me-2" style="color: var(--success-color);"></i>
-        <span id="notificationText">Produit ajouté au panier</span>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     {% block javascripts %}{% endblock %}
@@ -490,7 +631,6 @@
                 
                 this.save();
                 this.updateCartDisplay();
-                this.showNotification(`${item.title} ajouté au panier - ${item.price.toFixed(2)}€`);
                 
                 return this.items;
             }
@@ -537,35 +677,6 @@
                     element.textContent = itemCount;
                     element.style.display = itemCount > 0 ? 'block' : 'none';
                 });
-                
-                const cartBtn = document.querySelector('.cart-btn');
-                if (cartBtn) {
-                    if (itemCount > 0) {
-                        cartBtn.classList.add('has-items');
-                    } else {
-                        cartBtn.classList.remove('has-items');
-                    }
-                }
-            }
-            
-            showNotification(message) {
-                const notification = document.getElementById('cartNotification');
-                const notificationText = document.getElementById('notificationText');
-                
-                if (notification && notificationText) {
-                    notificationText.textContent = message;
-                    notification.style.display = 'flex';
-                    notification.style.alignItems = 'center';
-                    
-                    notification.style.animation = 'slideIn 0.3s ease';
-                    
-                    setTimeout(() => {
-                        notification.style.animation = 'slideOut 0.3s ease';
-                        setTimeout(() => {
-                            notification.style.display = 'none';
-                        }, 300);
-                    }, 3000);
-                }
             }
             
             save() {
@@ -576,6 +687,30 @@
         const cart = new ShoppingCart();
         
         document.addEventListener('DOMContentLoaded', function() {
+            // Mettre à jour le compteur du panier avec les données de session
+            const sessionCart = {{ app.session.get('cart', {})|json_encode|raw }};
+            let itemCount = 0;
+            
+            if (sessionCart && typeof sessionCart === 'object') {
+                itemCount = Object.values(sessionCart).reduce((sum, quantity) => sum + quantity, 0);
+            }
+            
+            document.querySelectorAll('.cart-count').forEach(element => {
+                element.textContent = itemCount;
+                element.style.display = itemCount > 0 ? 'block' : 'none';
+            });
+            
+            // Gestion des badges de genre cliquables
+            document.querySelectorAll('.badge-genre').forEach(badge => {
+                badge.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const genreName = this.textContent.trim();
+                    
+                    // Redirection vers la page filtrée
+                    window.location.href = `/films/genre/${encodeURIComponent(genreName)}`;
+                });
+            });
+            
             document.querySelectorAll('.add-to-cart').forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -604,18 +739,6 @@
                 });
             });
             
-            document.querySelectorAll('.cart-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    if (cart.getItemCount() > 0) {
-                        window.location.href = '/panier';
-                    } else {
-                        cart.showNotification('Votre panier est vide');
-                    }
-                });
-            });
-            
             const searchForm = document.querySelector('form.d-flex');
             if (searchForm) {
                 searchForm.addEventListener('submit', function(e) {
@@ -632,58 +755,28 @@
                 card.style.animationDelay = `${index * 0.1}s`;
                 card.classList.add('animate__animated', 'animate__fadeInUp');
             });
-            
-            const cartBtn = document.querySelector('.cart-btn');
-            if (cartBtn) {
-                cartBtn.addEventListener('click', function(e) {
-                    this.style.transform = 'scale(1.1)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 300);
-                });
-            }
         });
         
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes slideOut {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-            }
-            
-            .cart-btn.has-items {
-                border-color: var(--primary-color);
-                background: rgba(102, 126, 234, 0.1);
-            }
-            
             .animate__animated {
                 animation-duration: 0.6s;
             }
             
-            .dropdown-menu {
-                background-color: rgba(30, 30, 30, 0.98);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
+            /* Animation pour les cartes */
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
             
-            .dropdown-item {
-                color: rgba(255, 255, 255, 0.8);
-                transition: all 0.2s ease;
-            }
-            
-            .dropdown-item:hover {
-                background-color: rgba(102, 126, 234, 0.1);
-                color: white;
-            }
-            
-            .dropdown-item.text-danger:hover {
-                background-color: rgba(229, 62, 62, 0.1);
+            .animate__fadeInUp {
+                animation-name: fadeInUp;
             }
         `;
         document.head.appendChild(style);

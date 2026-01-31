@@ -1,4 +1,3 @@
-{# templates/movie/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ title }} - SiteFilm{% endblock %}
@@ -142,6 +141,15 @@
             margin-right: 5px;
             margin-bottom: 5px;
             border: 1px solid rgba(102, 126, 234, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .genre-badge:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
         }
         
         .film-actions {
@@ -151,9 +159,9 @@
         }
         
         .film-actions .btn {
-            padding: 0.5rem 0.75rem !important;
-            font-size: 1rem !important;
-            border-radius: 8px !important;
+            padding: 0.5rem 0.75rem ;
+            font-size: 1rem ;
+            border-radius: 8px ;
         }
         
         .ajax-notification {
@@ -230,6 +238,104 @@
             border: none;
             color: #a0aec0;
         }
+        
+        .promotion-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+        
+        .price-discounted {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #48bb78;
+        }
+        
+        .price-original {
+            font-size: 0.9rem;
+            color: #a0aec0;
+            text-decoration: line-through;
+            margin-right: 5px;
+        }
+        
+        .promotion-tag {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+        
+        .promotion-banner {
+            background: linear-gradient(135deg, rgba(72, 187, 120, 0.1), rgba(56, 161, 105, 0.1));
+            border: 1px solid rgba(72, 187, 120, 0.3);
+            color: #48bb78;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .categories-section {
+            background: rgba(26, 32, 44, 0.8);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .categories-section h3 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+        
+        .category-item {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .category-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .category-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
     </style>
 {% endblock %}
 
@@ -249,6 +355,23 @@
     </section>
 
     <div class="container">
+        
+        {% if promotionDuJour and promotionDuJour.pourcentage > 0 %}
+            <div class="promotion-banner">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-percentage me-3" style="font-size: 1.5rem;"></i>
+                    <div>
+                        <strong>Promotion du {{ promotionDuJour.jour }} !</strong>
+                        <span class="ms-2">{{ promotionDuJour.pourcentage|number_format(0) }}% de réduction sur tous les films</span>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <small class="text-muted">Profitez-en aujourd'hui seulement !</small>
+                </div>
+            </div>
+        {% endif %}
+        
+
         <section class="filters-section">
             <form method="get" class="row align-items-center">
                 <input type="hidden" name="page" value="1">
@@ -299,6 +422,7 @@
                         </div>
                         {% endif %}
                         
+                        
                         <div class="film-poster">
                             <img src="{{ film.chemin_affiche }}" alt="{{ film.titre }}" class="img-fluid">
                         </div>
@@ -311,11 +435,11 @@
                             </div>
                             
                             <div class="mb-2">
-                                {% set film_genres = film.genre|split(', ') %}
-                                {% for genre in film_genres %}
-                                    {% if genre != 'Non spécifié' %}
-                                        <span class="genre-badge">{{ genre }}</span>
-                                    {% endif %}
+                                {% for genre in film.genres_array %}
+                                    <a href="{{ path('app_movies_by_genre', {'genreName': genre.libelleGenre}) }}" 
+                                       class="genre-badge">
+                                        {{ genre.libelleGenre }}
+                                    </a>
                                 {% endfor %}
                             </div>
                             
@@ -333,7 +457,21 @@
                             <p class="film-synopsis">{{ film.synopsis }}</p>
                             
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="film-price">{{ film.prix_location_par_default }}€</div>
+                                <div>
+                                    {% if film.reduction_pourcentage > 0 %}
+                                        <div>
+                                            <span class="price-original">{{ film.prix_location_par_default|number_format(2, ',', ' ') }}€</span>
+                                            <span class="price-discounted">
+                                                {{ film.prix_location_reduit|number_format(2, ',', ' ') }}€
+                                                <span class="promotion-tag">-{{ film.reduction_pourcentage|number_format(0) }}%</span>
+                                            </span>
+                                        </div>
+                                    {% else %}
+                                        <div class="price-discounted">
+                                            {{ film.prix_location_par_default|number_format(2, ',', ' ') }}€
+                                        </div>
+                                    {% endif %}
+                                </div>
                                 <div class="film-actions">
                                     {% if film.is_favorite is defined %}
                                     <button class="btn btn-favorite {{ film.is_favorite ? 'active' : '' }}"
@@ -351,13 +489,14 @@
                                         <i class="fas fa-info-circle"></i>
                                     </button>
                                     
-                                    <button class="btn btn-success add-to-cart"
-                                            data-film="{{ film.titre }}"
-                                            data-price="{{ film.prix_location_par_default }}"
-                                            data-film-id="{{ film.id }}"
-                                            title="Ajouter au panier">
+                                    <a href="{{ path('app_cart_add', {idFilm: film.id}) }}"
+                                       class="btn btn-success add-to-cart"
+                                       data-film="{{ film.titre }}"
+                                       data-price="{{ film.reduction_pourcentage > 0 ? film.prix_location_reduit : film.prix_location_par_default }}"
+                                       data-film-id="{{ film.id }}"
+                                       title="Ajouter au panier">
                                         <i class="fas fa-cart-plus"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -377,8 +516,24 @@
                                                 <img src="{{ film.chemin_affiche }}" alt="{{ film.titre }}" class="img-fluid rounded">
                                             </div>
                                             <div class="text-center mb-3">
-                                                <div class="film-price display-6">{{ film.prix_location_par_default }}€</div>
-                                                <div class="film-rating">
+                                                {% if film.reduction_pourcentage > 0 %}
+                                                    <div class="mb-2">
+                                                        <span class="price-original">{{ film.prix_location_par_default|number_format(2, ',', ' ') }}€</span>
+                                                        <span class="price-discounted">
+                                                            {{ film.prix_location_reduit|number_format(2, ',', ' ') }}€
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="promotion-tag" style="font-size: 0.8rem;">
+                                                            -{{ film.reduction_pourcentage|number_format(0) }}% de réduction
+                                                        </span>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="price-discounted" style="font-size: 1.5rem;">
+                                                        {{ film.prix_location_par_default|number_format(2, ',', ' ') }}€
+                                                    </div>
+                                                {% endif %}
+                                                <div class="film-rating mt-2">
                                                     {% for i in 1..5 %}
                                                         {% if i <= film.rating %}
                                                             <i class="fas fa-star"></i>
@@ -393,15 +548,33 @@
                                         <div class="col-md-8">
                                             <p><strong>Durée :</strong> {{ film.duree }}</p>
                                             <p><strong>Genres :</strong> 
-                                                {% set film_genres = film.genre|split(', ') %}
-                                                {% for genre in film_genres %}
-                                                    <span class="genre-badge">{{ genre }}</span>
+                                                {% for genre in film.genres_array %}
+                                                    <a href="{{ path('app_movies_by_genre', {'genreName': genre.libelleGenre}) }}" 
+                                                       class="genre-badge">
+                                                        {{ genre.libelleGenre }}
+                                                    </a>
                                                 {% endfor %}
                                             </p>
                                             <p><strong>Année :</strong> {{ film.annee }}</p>
+                                            
                                             {% if film.est_nouveau %}
                                                 <p><span class="badge bg-success">Nouveauté</span></p>
                                             {% endif %}
+                                            
+                                            {% if film.reduction_pourcentage > 0 %}
+                                                <p>
+                                                    <span class="badge" style="background: linear-gradient(135deg, #48bb78, #38a169);">
+                                                        <i class="fas fa-percentage me-1"></i>
+                                                        Promotion active : -{{ film.reduction_pourcentage|number_format(0) }}%
+                                                    </span>
+                                                    <br>
+                                                    <small class="text-success">
+                                                        <i class="fas fa-tag me-1"></i>
+                                                        Économisez {{ (film.prix_location_par_default - film.prix_location_reduit)|number_format(2, ',', ' ') }}€
+                                                    </small>
+                                                </p>
+                                            {% endif %}
+                                            
                                             <hr class="bg-secondary">
                                             <p><strong>Synopsis :</strong></p>
                                             <p>{{ film.synopsis }}</p>
@@ -420,12 +593,18 @@
                                     </button>
                                     {% endif %}
                                     
-                                    <button class="btn btn-primary add-to-cart"
-                                            data-film="{{ film.titre }}"
-                                            data-price="{{ film.prix_location_par_default }}"
-                                            data-film-id="{{ film.id }}">
-                                        <i class="fas fa-cart-plus me-2"></i>Ajouter au panier
-                                    </button>
+                                    <a href="{{ path('app_cart_add', {idFilm: film.id}) }}"
+                                       class="btn btn-primary add-to-cart"
+                                       data-film="{{ film.titre }}"
+                                       data-price="{{ film.reduction_pourcentage > 0 ? film.prix_location_reduit : film.prix_location_par_default }}"
+                                       data-film-id="{{ film.id }}">
+                                        <i class="fas fa-cart-plus me-2"></i>
+                                        {% if film.reduction_pourcentage > 0 %}
+                                            Louer à {{ film.prix_location_reduit|number_format(2, ',', ' ') }}€
+                                        {% else %}
+                                            Ajouter au panier
+                                        {% endif %}
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -512,8 +691,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Page chargée - Utilisateur connecté: {{ app.user ? "OUI" : "NON" }}');
             
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                button.addEventListener('click', function() {
+            document.querySelectorAll('.add-to-cart').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault(); 
+                    
                     const filmTitle = this.getAttribute('data-film');
                     const filmPrice = this.getAttribute('data-price');
                     const filmId = this.getAttribute('data-film-id');
@@ -532,15 +713,15 @@
                     showNotification(`"${filmTitle}" ajouté au panier (${filmPrice}€)`, 'success');
                     
                     const originalHTML = this.innerHTML;
+                    const originalHref = this.href;
                     this.innerHTML = '<i class="fas fa-check"></i> Ajouté';
                     this.classList.remove('btn-success', 'btn-primary');
                     this.classList.add('btn-secondary');
+                    this.style.pointerEvents = 'none';
                     
                     setTimeout(() => {
-                        this.innerHTML = originalHTML;
-                        this.classList.remove('btn-secondary');
-                        this.classList.add(this.classList.contains('btn-outline') ? 'btn-outline-primary' : 'btn-success');
-                    }, 2000);
+                        window.location.href = originalHref;
+                    }, 1000);
                 });
             });
             

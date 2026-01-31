@@ -150,9 +150,9 @@
         }
         
         .film-actions .btn {
-            padding: 0.5rem 0.75rem !important;
-            font-size: 1rem !important;
-            border-radius: 8px !important;
+            padding: 0.5rem 0.75rem ;
+            font-size: 1rem ;
+            border-radius: 8px ;
         }
         
         .ajax-notification {
@@ -197,19 +197,19 @@
         .badge,
         .film-title,
         .film-meta {
-            color: white !important;
+            color: white ;
         }
         
         .breadcrumb-item.active {
-            color: rgba(255, 255, 255, 0.8) !important;
+            color: rgba(255, 255, 255, 0.8) ;
         }
         
         .breadcrumb-item a {
-            color: #667eea !important;
+            color: #667eea ;
         }
         
         .breadcrumb-item a:hover {
-            color: #764ba2 !important;
+            color: #764ba2 ;
         }
         
         .text-muted {
@@ -222,13 +222,50 @@
         }
         
         .badge.bg-secondary {
-            background-color: rgba(102, 126, 234, 0.3) !important;
-            color: white !important;
+            background-color: rgba(102, 126, 234, 0.3) ;
+            color: white ;
             border: 1px solid rgba(102, 126, 234, 0.5);
         }
         
         .badge.bg-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2) !important;
+            background: linear-gradient(135deg, #667eea, #764ba2) ;
+        }
+        
+        .remove-favorite-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(229, 62, 62, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .remove-favorite-btn:hover {
+            background: rgba(197, 48, 48, 0.9);
+            transform: scale(1.1);
+        }
+        
+        .film-card-container {
+            position: relative;
+        }
+        
+        .film-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 1rem;
+            color: white;
         }
     </style>
 {% endblock %}
@@ -246,8 +283,13 @@
             </nav>
             
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1><i></i>Mes Favoris</h1>
-                <span class="badge bg-primary fs-6">{{ favoris|length }} film(s)</span>
+                <h1><i class="fas fa-heart me-2"></i>Mes Favoris</h1>
+                <div>
+                    <span class="badge bg-primary fs-6 me-3">{{ favoris|length }} film(s)</span>
+                    <a href="{{ path('app_movies') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Ajouter des films
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -256,19 +298,26 @@
         <div class="row">
             {% for film in favoris %}
                 <div class="col-md-4 col-lg-3 mb-4">
-                    <div class="film-card h-100">
-                        <img src="{{ film.affiche }}" 
-                             class="film-poster" alt="{{ film.titre }}">
-                        <div class="p-3">
-                            <h5 class="film-title">{{ film.titre }}</h5>
-                            <p class="text-muted small mb-2">{{ film.annee }} • {{ film.duree }}</p>
-                            <p class="text-muted small mb-3">
-                                <i class="fas fa-calendar-alt me-1"></i>
-                                Ajouté le {{ film.date_ajout|date('d/m/Y') }}
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-secondary">{{ film.categorie|split(', ')|first }}</span>
-                                <div class="btn-group">
+                    <div class="film-card-container">
+                        <div class="film-card h-100">
+                            <form method="post" action="{{ path('app_favoris_supprimer', {'id': film.film_id}) }}" class="remove-favorite-form">
+                                <input type="hidden" name="_token" value="{{ csrf_token('favoris_supprimer_' ~ film.film_id) }}">
+                                <button type="submit" class="remove-favorite-btn" title="Supprimer des favoris">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                            
+                            <img src="{{ film.affiche }}" 
+                                 class="film-poster" alt="{{ film.titre }}">
+                            <div class="film-info">
+                                <h5 class="film-title mb-1">{{ film.titre }}</h5>
+                                <p class="text-muted small mb-1">{{ film.annee }} • {{ film.duree }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-secondary">{{ film.categorie|split(', ')|first }}</span>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar-alt me-1"></i>
+                                        {{ film.date_ajout|date('d/m/Y') }}
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -292,6 +341,9 @@
                             <a href="{{ path('app_movies') }}" class="btn btn-primary btn-lg">
                                 <i class="fas fa-film me-2"></i>Découvrir des films
                             </a>
+                            <a href="{{ path('app_profile') }}" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i>Retour au profil
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -299,4 +351,54 @@
         </div>
     {% endif %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('.remove-favorite-form');
+    
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (confirm('Voulez-vous vraiment supprimer ce film de vos favoris ?')) {
+                const button = this.querySelector('button');
+                const originalHtml = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                button.disabled = true;
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: new FormData(this)
+                })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    button.innerHTML = originalHtml;
+                    button.disabled = false;
+                    alert('Une erreur est survenue. Veuillez réessayer.');
+                });
+            }
+        });
+    });
+    
+    const removeButtons = document.querySelectorAll('.remove-favorite-btn');
+    removeButtons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            const card = this.closest('.film-card');
+            card.style.transform = 'scale(1.02)';
+            card.style.boxShadow = '0 25px 50px rgba(229, 62, 62, 0.3)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            const card = this.closest('.film-card');
+            card.style.transform = '';
+            card.style.boxShadow = '';
+        });
+    });
+});
+</script>
 {% endblock %}

@@ -4,16 +4,163 @@
 
 {% block body %}
 <div class="container py-5">
+    <style>
+        .page-profile .container {
+            background-color: transparent ;
+        }
+        
+        .page-profile .card {
+            background-color: rgba(20, 20, 20, 0.9) ;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9) ;
+        }
+        
+        .page-profile .card-body,
+        .page-profile .card-header {
+            color: rgba(255, 255, 255, 0.9) ;
+        }
+        
+        .page-profile .card-header {
+            background-color: rgba(0, 0, 0, 0.3) ;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .page-profile .table {
+            background-color: transparent ;
+            color: rgba(255, 255, 255, 0.9) ;
+        }
+        
+        .page-profile .table th {
+            color: rgba(255, 255, 255, 0.9) ;
+            background-color: rgba(0, 0, 0, 0.3) ;
+            border-color: rgba(255, 255, 255, 0.1) ;
+        }
+        
+        .page-profile .table td {
+            color: rgba(255, 255, 255, 0.9) ;
+            background-color: transparent ;
+            border-color: rgba(255, 255, 255, 0.05) ;
+        }
+        
+        .page-profile .table-hover tbody tr:hover {
+            background-color: rgba(102, 126, 234, 0.1) ;
+        }
+        
+        .page-profile table.table {
+            --bs-table-bg: transparent ;
+            --bs-table-striped-bg: rgba(255, 255, 255, 0.05) ;
+            --bs-table-striped-color: rgba(255, 255, 255, 0.9) ;
+            --bs-table-active-bg: rgba(102, 126, 234, 0.1) ;
+            --bs-table-active-color: rgba(255, 255, 255, 0.9) ;
+            --bs-table-hover-bg: rgba(102, 126, 234, 0.1) ;
+            --bs-table-hover-color: rgba(255, 255, 255, 0.9) ;
+            color: rgba(255, 255, 255, 0.9) ;
+            border-color: rgba(255, 255, 255, 0.1) ;
+        }
+        
+        .page-profile .table-responsive {
+            background-color: transparent ;
+        }
+        
+        .page-profile .text-muted {
+            color: rgba(255, 255, 255, 0.7) ;
+        }
+        
+        .page-profile h1,
+        .page-profile h2,
+        .page-profile h3,
+        .page-profile h4,
+        .page-profile h5,
+        .page-profile h6,
+        .page-profile p,
+        .page-profile span,
+        .page-profile div,
+        .page-profile .card-title {
+            color: rgba(255, 255, 255, 0.9) ;
+        }
+        
+        .page-profile .border {
+            border-color: rgba(255, 255, 255, 0.1) ;
+        }
+        
+        .page-profile .rounded-circle {
+            background: linear-gradient(45deg, #007bff, #6610f2);
+        }
+        
+        .page-profile .badge {
+            color: white ;
+        }
+        
+        .page-profile .btn-outline-primary {
+            color: var(--primary-color) ;
+            border-color: var(--primary-color);
+        }
+        
+        .page-profile .btn-outline-primary:hover {
+            color: white ;
+        }
+        
+        .page-profile .btn-outline-danger {
+            color: var(--accent-color) ;
+            border-color: var(--accent-color);
+        }
+        
+        .page-profile .btn-outline-danger:hover {
+            color: white ;
+        }
+        
+        .page-profile .form-control {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: white ;
+        }
+        
+        .page-profile small {
+            color: rgba(255, 255, 255, 0.7) ;
+        }
+        
+        .page-profile .alert {
+            color: white ;
+        }
+        
+        .page-profile .bg-secondary {
+            background-color: #6c757d ;
+        }
+        
+        .page-profile .table img.rounded {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .page-profile .text-center.py-5 {
+            background-color: transparent ;
+        }
+    </style>
+    
     <div class="row">
         <div class="col-lg-4 mb-4">
             <div class="card">
                 <div class="card-body text-center">
                     <div class="mb-4">
                         <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
-                            <span class="display-4 text-white">{{ user.nom|first|upper }}</span>
+                            <span class="display-4 text-white">
+                                {% if user.nom %}
+                                    {{ user.nom|first|upper }}
+                                {% endif %}
+                                {% if user.prenom %}
+                                    {{ user.prenom|first|upper }}
+                                {% endif %}
+                            </span>
                         </div>
                     </div>
-                    <h4>{{ user.nom }}</h4>
+                    <h4>
+                        {% if user.nom and user.prenom %}
+                            {{ user.nom }} {{ user.prenom }}
+                        {% elseif user.nom %}
+                            {{ user.nom }}
+                        {% else %}
+                            Utilisateur
+                        {% endif %}
+                    </h4>
                     <p class="text-muted mb-3">{{ user.email }}</p>
                     <p class="mb-4">
                         <i class="fas fa-calendar-alt me-2"></i>
@@ -36,14 +183,20 @@
                     <div class="row text-center">
                         <div class="col-6 mb-3">
                             <div class="border rounded p-3">
-                                <h3 class="mb-1">0</h3>
-                                <small class="text-muted">Films visionnés</small>
+                                <h3 class="mb-1">{{ locations|length }}</h3>
+                                <small class="text-muted">Films loués</small>
                             </div>
                         </div>
                         <div class="col-6 mb-3">
                             <div class="border rounded p-3">
-                                <h3 class="mb-1">0</h3>
+                                <h3 class="mb-1">{{ favoris|length }}</h3>
                                 <small class="text-muted">Favoris</small>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <div class="border rounded p-3">
+                                <h5 class="mb-1">{{ totalDepense|number_format(2, ',', ' ') }} €</h5>
+                                <small class="text-muted">Total dépensé</small>
                             </div>
                         </div>
                     </div>
@@ -55,37 +208,198 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0"><i class="fas fa-history me-2"></i>Activité récente</h4>
+                    {% if locations|length > 0 %}
+                        <span class="badge bg-primary rounded-pill">{{ locations|length }} location(s)</span>
+                    {% endif %}
                 </div>
                 <div class="card-body">
-                    <div class="text-center py-5">
-                        <i class="fas fa-film fa-3x text-muted mb-3"></i>
-                        <h5>Aucune activité récente</h5>
-                        <p class="text-muted">Commencez à regarder des films pour voir votre activité ici.</p>
-                        <a href="{{ path('app_home') }}" class="btn btn-primary">
-                            <i class="fas fa-play-circle me-2"></i>Découvrir des films
-                        </a>
-                    </div>
+                    {% if locations is empty %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-film fa-3x text-muted mb-3"></i>
+                            <h5>Aucune location récente</h5>
+                            <p class="text-muted">Commencez à louer des films pour voir votre activité ici.</p>
+                            <a href="{{ path('app_movies') }}" class="btn btn-primary">
+                                <i class="fas fa-play-circle me-2"></i>Découvrir des films
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-hover table-dark">
+                                <thead>
+                                    <tr>
+                                        <th>Film</th>
+                                        <th>Date de location</th>
+                                        <th>Prix</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for location in locations|slice(0, 5) %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    {% if location.film and location.film.cheminAffiche %}
+                                                        <img src="{{ location.film.fullAfficheUrl }}" alt="{{ location.film.titre }}" class="rounded me-3" style="width: 60px; height: 80px; object-fit: cover;">
+                                                    {% else %}
+                                                        <div class="bg-secondary rounded d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 80px;">
+                                                            <i class="fas fa-film text-white"></i>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div>
+                                                        <h6 class="mb-0">{{ location.film.titre }}</h6>
+                                                        <small class="text-muted">{{ location.film.annee }} • {{ location.film.formattedDuration }}</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {{ location.dateLocation|date('d/m/Y H:i') }}
+                                                <br>
+                                                <small class="text-muted">Il y a 
+                                                    {% set diff = date().diff(location.dateLocation) %}
+                                                    {% if diff.y > 0 %}
+                                                        {{ diff.y }} an{{ diff.y > 1 ? 's' : '' }}
+                                                    {% elseif diff.m > 0 %}
+                                                        {{ diff.m }} mois
+                                                    {% elseif diff.d > 0 %}
+                                                        {{ diff.d }} jour{{ diff.d > 1 ? 's' : '' }}
+                                                    {% elseif diff.h > 0 %}
+                                                        {{ diff.h }} heure{{ diff.h > 1 ? 's' : '' }}
+                                                    {% elseif diff.i > 0 %}
+                                                        {{ diff.i }} minute{{ diff.i > 1 ? 's' : '' }}
+                                                    {% else %}
+                                                        quelques secondes
+                                                    {% endif %}
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success rounded-pill">{{ location.prixFinal|number_format(2, ',', ' ') }} €</span>
+                                            </td>
+                                            <td>
+                                                {% if location.film %}
+                                                    <a href="{{ path('app_movies') }}" class="btn btn-sm btn-outline-primary" title="Voir les films">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    {% set isFavorite = false %}
+                                                    {% for favori in favoris %}
+                                                        {% if favori.film.idFilm == location.film.idFilm %}
+                                                            {% set isFavorite = true %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if not isFavorite %}
+                                                        <form method="post" action="{{ path('app_favoris_ajouter', {'id': location.film.idFilm}) }}" class="d-inline">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('favoris_ajouter_' ~ location.film.idFilm) }}">
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Ajouter aux favoris">
+                                                                <i class="far fa-heart"></i>
+                                                            </button>
+                                                        </form>
+                                                    {% else %}
+                                                        <span class="badge bg-danger ms-2">
+                                                            <i class="fas fa-heart"></i> Favori
+                                                        </span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if locations|length > 5 %}
+                                <div class="text-center mt-3">
+                                    <a href="{{ path('app_mes_locations') }}" class="btn btn-sm btn-outline-primary">
+                                        Voir toutes mes locations ({{ locations|length }}) <i class="fas fa-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             
             <div class="card mt-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0"><i class="fas fa-heart me-2"></i>Mes Favoris</h4>
-                    <a href="{{ path('app_favoris') }}" class="btn btn-sm btn-outline-primary">
-                        Voir tous <i class="fas fa-arrow-right ms-1"></i>
-                    </a>
+                    {% if favoris|length > 0 %}
+                        <span class="badge bg-danger rounded-pill">{{ favoris|length }} favori(s)</span>
+                    {% endif %}
                 </div>
                 <div class="card-body">
-                    <div class="text-center py-4">
-                        <i class="fas fa-heart-broken fa-2x text-muted mb-3"></i>
-                        <p class="text-muted mb-0">Vous n'avez pas encore de films favoris</p>
-                        <a href="{{ path('app_favoris') }}" class="btn btn-sm btn-primary mt-3">
-                            <i class="fas fa-plus me-1"></i>Ajouter des favoris
-                        </a>
-                    </div>
+                    {% if favoris is empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-heart-broken fa-2x text-muted mb-3"></i>
+                            <p class="text-muted mb-0">Vous n'avez pas encore de films favoris</p>
+                            <a href="{{ path('app_favoris') }}" class="btn btn-sm btn-primary mt-3">
+                                <i class="fas fa-plus me-1"></i>Ajouter des favoris
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="row">
+                            {% for favori in favoris|slice(0, 4) %}
+                                <div class="col-md-6 mb-3">
+                                    <div class="card h-100 border">
+                                        <div class="row g-0">
+                                            <div class="col-4">
+                                                <img src="{{ favori.affiche }}" class="img-fluid rounded-start h-100" alt="{{ favori.titre }}" style="object-fit: cover; width: 100%; height: 100%;">
+                                            </div>
+                                            <div class="col-8">
+                                                <div class="card-body h-100 d-flex flex-column">
+                                                    <h6 class="card-title mb-1">{{ favori.titre }}</h6>
+                                                    <p class="card-text mb-2">
+                                                        <small class="text-muted">
+                                                            {{ favori.annee }} • {{ favori.duree }}
+                                                            <br>
+                                                            Ajouté le {{ favori.date_ajout|date('d/m/Y') }}
+                                                        </small>
+                                                    </p>
+                                                    <div class="mt-auto">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            {% if favori.film.note %}
+                                                                <span class="badge bg-warning text-dark">
+                                                                    <i class="fas fa-star me-1"></i>{{ favori.film.note }}
+                                                                </span>
+                                                            {% endif %}
+                                                            <div>
+                                                                <a href="{{ path('app_movies') }}" class="btn btn-sm btn-outline-primary" title="Voir les films">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </a>
+                                                                <form method="post" action="{{ path('app_favoris_supprimer', {'id': favori.film_id}) }}" class="d-inline">
+                                                                    <input type="hidden" name="_token" value="{{ csrf_token('favoris_supprimer_' ~ favori.film_id) }}">
+                                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer des favoris">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% if favoris|length > 4 %}
+                            <div class="text-center mt-3">
+                                <a href="{{ path('app_favoris') }}" class="btn btn-sm btn-outline-danger">
+                                    Voir tous mes favoris ({{ favoris|length }}) <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('page-profile');
+        
+        document.querySelectorAll('table').forEach(table => {
+            if (!table.classList.contains('table-dark')) {
+                table.classList.add('table-dark');
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -249,7 +249,7 @@
             
             {% for category in categories %}
             <div class="col-lg-3 col-md-4 col-sm-6">
-                <a href="#" class="category-card">
+                <a href="{{ path('app_movies_by_genre', {'genreName': category.name}) }}" class="category-card">
                     <div class="text-center">
                         <div class="category-icon">
                             <i class="fas fa-{{ category.icon }}"></i>

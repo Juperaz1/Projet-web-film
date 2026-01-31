@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repository;
+
 use App\Entity\Genre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -38,5 +39,27 @@ class GenreRepository extends ServiceEntityRepository
     {
         $genres = $this->createQueryBuilder('g')->select('g.libelleGenre')->orderBy('g.libelleGenre', 'ASC')->getQuery()->getScalarResult();
         return array_column($genres, 'libelleGenre');
+    }
+    
+
+    public function findAllOrdered(): array
+    {
+        return $this->createQueryBuilder('g')
+            ->orderBy('g.libelleGenre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+    
+
+    public function findPopularGenres(int $limit = 10): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('g', 'COUNT(f.idFilm) as filmCount')
+            ->leftJoin('g.films', 'f')
+            ->groupBy('g.idGenre')
+            ->orderBy('filmCount', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 }

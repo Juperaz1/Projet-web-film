@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Panier - SiteFilm{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1><i class="fas fa-shopping-cart me-2"></i>Mon panier</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    
+    {% for message in app.flashes('warning') %}
+        <div class="alert alert-warning">{{ message }}</div>
+    {% endfor %}
+
+    {% if cartItems is empty %}
+        <div class="alert alert-info text-center py-5">
+            <i class="fas fa-shopping-cart fa-3x mb-3" style="color: #667eea;"></i>
+            <h5>Votre panier est vide</h5>
+            <p class="mb-4">Ajoutez des films à votre panier pour les louer.</p>
+            <a href="{{ path('app_movies') }}" class="btn btn-primary">
+                <i class="fas fa-film me-2"></i>Parcourir les films
+            </a>
+        </div>
+    {% else %}
+        {% if promotionDuJour %}
+            <div class="alert alert-success mb-4">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-percentage fa-2x me-3"></i>
+                    <div>
+                        <h5 class="mb-1">Promotion du {{ promotionDuJour.jour }} !</h5>
+                        <p class="mb-0">
+                            <strong>{{ promotionDuJour.pourcentage|number_format(0) }}% de réduction</strong> sur toutes vos locations
+                            {% if totalSansReduction is defined and totalSansReduction > 0 %}
+                                <br>
+                                <small>Vous économisez <strong>{{ reduction|number_format(2, ',', ' ') }} €</strong></small>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Film</th>
+                        <th class="text-center">Prix unitaire</th>
+                        <th class="text-center">Quantité</th>
+                        <th class="text-end">Sous-total</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cartItems %}
+                        <tr>
+                            <td>
+                                <strong>{{ item.film.titre }}</strong>
+                                <br>
+                                <small class="text-muted">{{ item.film.annee }} • {{ item.film.getFormattedDuration() }}</small>
+                                {% if promotionDuJour and promotionDuJour.pourcentage > 0 %}
+                                    <br>
+                                    <small class="text-success">
+                                        <i class="fas fa-tag me-1"></i>
+                                        Économie : {{ (item.price * promotionDuJour.pourcentage / 100 * item.quantity)|number_format(2, ',', ' ') }} €
+                                    </small>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {{ item.price|number_format(2, ',', ' ') }} €
+                                {% if promotionDuJour and promotionDuJour.pourcentage > 0 %}
+                                    <br>
+                                    <small class="text-success">
+                                        -{{ promotionDuJour.pourcentage|number_format(0) }}%
+                                    </small>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">{{ item.quantity }}</td>
+                            <td class="text-end">
+                                {{ item.subtotal|number_format(2, ',', ' ') }} €
+                                {% if promotionDuJour and promotionDuJour.pourcentage > 0 %}
+                                    {% set reductionFilm = item.subtotal * promotionDuJour.pourcentage / 100 %}
+                                    <br>
+                                    <small class="text-success">
+                                        = {{ (item.subtotal - reductionFilm)|number_format(2, ',', ' ') }} €
+                                    </small>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ path('app_cart_remove', {idFilm: item.film.getIdFilm()}) }}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Retirer ce film du panier ?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    {% if promotionDuJour and reduction > 0 %}
+                        <tr>
+                            <td colspan="3" class="text-end text-success">
+                                <strong>Sous-total :</strong>
+                            </td>
+                            <td class="text-end text-success">
+                                <strong>{{ totalSansReduction|number_format(2, ',', ' ') }} €</strong>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-end text-success">
+                                <strong>Réduction ({{ promotionDuJour.pourcentage|number_format(0) }}%) :</strong>
+                            </td>
+                            <td class="text-end text-success">
+                                <strong>-{{ reduction|number_format(2, ',', ' ') }} €</strong>
+                            </td>
+                            <td></td>
+                        </tr>
+                    {% endif %}
+                    <tr class="table-primary">
+                        <td colspan="3" class="text-end">
+                            <strong>Total {{ promotionDuJour ? 'après réduction' : '' }} :</strong>
+                        </td>
+                        <td class="text-end">
+                            <strong>{{ total|number_format(2, ',', ' ') }} €</strong>
+                            {% if promotionDuJour and reduction > 0 %}
+                                <br>
+                                <small class="text-success">
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    Économie de {{ reduction|number_format(2, ',', ' ') }} €
+                                </small>
+                            {% endif %}
+                        </td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <a href="{{ path('app_cart_clear') }}"
+                   class="btn btn-outline-danger"
+                   onclick="return confirm('Vider complètement le panier ?')">
+                   <i class="fas fa-trash me-2"></i>Vider le panier
+                </a>
+                
+                <a href="{{ path('app_movies') }}" class="btn btn-outline-primary ms-2">
+                    <i class="fas fa-plus me-2"></i>Ajouter d'autres films
+                </a>
+            </div>
+            
+            <div>
+                {% if is_granted('ROLE_USER') %}
+                    <a href="{{ path('app_payment') }}" class="btn btn-success btn-lg">
+                        <i class="fas fa-credit-card me-2"></i>Procéder au paiement
+                        {% if promotionDuJour and promotionDuJour.pourcentage > 0 %}
+                            <br>
+                            <small class="text-white">(-{{ promotionDuJour.pourcentage|number_format(0) }}%)</small>
+                        {% endif %}
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-warning btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Connectez-vous pour payer
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

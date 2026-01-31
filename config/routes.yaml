@@ -1,4 +1,3 @@
-# config/routes/web.yaml
 app_home:
     path: /
     controller: App\Controller\HomeController::index
@@ -7,6 +6,11 @@ app_home:
 app_movies:
     path: /films
     controller: App\Controller\MovieController::index
+    methods: GET
+
+app_movies_by_genre:
+    path: /films/genre/{genreName}
+    controller: App\Controller\MovieController::byGenre
     methods: GET
 
 app_movies_toggle_favorite:
@@ -29,21 +33,6 @@ api_film_favorite:
     controller: App\Controller\MovieController::apiToggleFavorite
     methods: POST
 
-app_profile:
-    path: /profile
-    controller: App\Controller\ProfileController::index
-    methods: [GET]
-
-app_favoris:
-    path: /profile/favoris
-    controller: App\Controller\ProfileController::favoris
-    methods: [GET]
-
-app_parametres:
-    path: /profile/parametres
-    controller: App\Controller\ProfileController::parametres
-    methods: [GET]
-
 app_login:
     path: /connexion
     controller: App\Controller\LoginController::login
@@ -58,16 +47,6 @@ app_logout:
     path: /deconnexion
     controller: App\Controller\LoginController::logout
     methods: GET
-
-app_add_to_cart:
-    path: /api/cart/add
-    controller: App\Controller\CartController::add
-    methods: [POST]
-
-app_view_cart:
-    path: /panier
-    controller: App\Controller\CartController::view
-    methods: [GET]
 
 admin_films:
     path: /admin/films
@@ -93,8 +72,83 @@ admin_film_delete:
     requirements:
         id: '\d+'
 
-# Import automatique des routes des contrôleurs avec attributs
-#controllers:
-#    resource: ../src/Controller/
-#    type: attribute
-#    prefix: /
+app_payment:
+    path: /paiement
+    controller: App\Controller\PaymentController::paiement
+    methods: GET
+
+app_payment_validate:
+    path: /paiement/valider
+    controller: App\Controller\PaymentController::valider
+    methods: POST
+
+app_payment_success:
+    path: /paiement/succes
+    controller: App\Controller\PaymentController::success
+    methods: GET
+
+app_cart:
+    path: /panier
+    controller: App\Controller\CartController::index
+    methods: GET
+
+app_cart_add:
+    path: /panier/ajouter/{idFilm}
+    controller: App\Controller\CartController::add
+    methods: GET
+    requirements:
+        idFilm: '\d+'
+
+app_cart_remove:
+    path: /panier/supprimer/{idFilm}
+    controller: App\Controller\CartController::remove
+    methods: GET
+    requirements:
+        idFilm: '\d+'
+
+app_cart_clear:
+    path: /panier/vider
+    controller: App\Controller\CartController::clear
+    methods: GET
+
+app_profile:
+    path: /profile
+    controller: App\Controller\ProfileController::index
+    methods: GET
+
+app_favoris:
+    path: /profile/favoris
+    controller: App\Controller\ProfileController::favoris
+    methods: [GET]
+
+app_parametres:
+    path: /profile/parametres
+    controller: App\Controller\ProfileController::parametres
+    methods: [GET]
+
+app_mes_locations:
+    path: /profile/locations
+    controller: App\Controller\ProfileController::mesLocations
+    methods: GET
+
+app_favoris_supprimer:
+    path: /profile/favoris/supprimer/{id}
+    controller: App\Controller\ProfileController::supprimerFavori
+    methods: POST
+
+app_favoris_ajouter:
+    path: /profile/favoris/ajouter/{id}
+    controller: App\Controller\ProfileController::ajouterFavori
+    methods: POST
+
+app_favoris_toggle:
+    path: /profile/favoris/toggle/{id}
+    controller: App\Controller\ProfileController::toggleFavori
+    methods: POST
+
+
+
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+    prefix: /

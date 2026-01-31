@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement - SiteFilm{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card bg-dark text-white border-primary">
+                <div class="card-header bg-primary">
+                    <h2 class="mb-0"><i class="fas fa-credit-card me-2"></i>Paiement</h2>
+                </div>
+                <div class="card-body">
+                    {% if promotionDuJour %}
+                        <div class="alert alert-success mb-4">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-percentage fa-2x me-3"></i>
+                                <div>
+                                    <h5 class="mb-1">Promotion du {{ promotionDuJour.jour }} !</h5>
+                                    <p class="mb-0">
+                                        <strong>{{ promotionDuJour.pourcentage|number_format(0) }}% de réduction</strong> appliquée
+                                        {% if reduction > 0 %}
+                                            <br>
+                                            <small>Vous économisez <strong>{{ reduction|number_format(2, ',', ' ') }} €</strong></small>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+
+                    <h4 class="mb-3">Récapitulatif de votre commande</h4>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Film</th>
+                                    <th class="text-center">Quantité</th>
+                                    <th class="text-center">Prix unitaire</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cartItems %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ item.titre }}</strong>
+                                        </td>
+                                        <td class="text-center">{{ item.quantite }}</td>
+                                        <td class="text-center">{{ item.prix|number_format(2, ',', ' ') }} €</td>
+                                        <td class="text-end">{{ item.sous_total|number_format(2, ',', ' ') }} €</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                {% if promotionDuJour and reduction > 0 %}
+                                    <tr>
+                                        <td colspan="3" class="text-end text-success">
+                                            <strong>Sous-total :</strong>
+                                        </td>
+                                        <td class="text-end text-success">
+                                            <strong>{{ totalSansReduction|number_format(2, ',', ' ') }} €</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" class="text-end text-success">
+                                            <strong>Réduction ({{ promotionDuJour.pourcentage|number_format(0) }}%) :</strong>
+                                        </td>
+                                        <td class="text-end text-success">
+                                            <strong>-{{ reduction|number_format(2, ',', ' ') }} €</strong>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                <tr class="table-primary">
+                                    <td colspan="3" class="text-end">
+                                        <strong>Total {{ promotionDuJour ? 'après réduction' : '' }} :</strong>
+                                    </td>
+                                    <td class="text-end">
+                                        <strong>{{ total|number_format(2, ',', ' ') }} €</strong>
+                                        {% if promotionDuJour and reduction > 0 %}
+                                            <br>
+                                            <small class="text-success">
+                                                <i class="fas fa-check-circle me-1"></i>
+                                                Économie de {{ reduction|number_format(2, ',', ' ') }} €
+                                            </small>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+
+                    <form method="post" action="{{ path('app_payment_validate') }}" class="mt-4">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ path('app_cart') }}" class="btn btn-outline-secondary btn-lg me-2">
+                                <i class="fas fa-arrow-left me-2"></i>Retour au panier
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-check-circle me-2"></i>Confirmer le paiement
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

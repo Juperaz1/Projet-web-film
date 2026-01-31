@@ -16,7 +16,7 @@ class Favoris
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'IdUtilisateur', referencedColumnName: 'IdUtilisateur', nullable: false)]
-    private ?User $utilisateur = null;
+    private ?User $utilisateur = null; 
 
     #[ORM\ManyToOne(targetEntity: Film::class)]
     #[ORM\JoinColumn(name: 'IdFilm', referencedColumnName: 'IdFilm', nullable: false)]
@@ -65,6 +65,17 @@ class Favoris
     public function setDateAjout(\DateTimeInterface $dateAjout): static
     {
         $this->dateAjout = $dateAjout;
+        return $this;
+    }
+    
+    public function getUser(): ?User
+    {
+        return $this->utilisateur;
+    }
+    
+    public function setUser(?User $user): static
+    {
+        $this->utilisateur = $user;
         return $this;
     }
 }

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement Réussi - SiteFilm{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card bg-dark text-white border-success">
+                <div class="card-header bg-success">
+                    <h2 class="mb-0"><i class="fas fa-check-circle me-2"></i>Paiement confirmé !</h2>
+                </div>
+                <div class="card-body text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-film fa-5x" style="color: #48bb78;"></i>
+                    </div>
+                    
+                    <h3 class="mb-3">Merci pour votre location !</h3>
+                    
+                    <p class="lead mb-4">
+                        Vos films ont été ajoutés à votre bibliothèque et sont maintenant disponibles pour le visionnage.
+                    </p>
+                    
+                    
+                    <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+                        <a href="{{ path('app_movies') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-film me-2"></i>Voir plus de films
+                        </a>
+                        <a href="{{ path('app_profile') }}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-user me-2"></i>Mon profil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

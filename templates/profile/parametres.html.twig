@@ -3,6 +3,115 @@
 {% block title %}Paramètres - SiteFilm{% endblock %}
 
 {% block body %}
+<style>
+  
+    .page-params .container {
+        background-color: transparent ;
+    }
+    
+    .page-params .card {
+        background-color: rgba(20, 20, 20, 0.9) ;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9) ;
+    }
+    
+    .page-params .card-body,
+    .page-params .card-header {
+        color: rgba(255, 255, 255, 0.9) ;
+    }
+    
+    .page-params .card-header {
+        background-color: rgba(0, 0, 0, 0.3) ;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .page-params .text-muted {
+        color: rgba(255, 255, 255, 0.7) ;
+    }
+    
+    .page-params h1,
+    .page-params h2,
+    .page-params h3,
+    .page-params h4,
+    .page-params h5,
+    .page-params h6,
+    .page-params p,
+    .page-params span,
+    .page-params div,
+    .page-params label {
+        color: rgba(255, 255, 255, 0.9) ;
+    }
+    
+    .page-params .list-group-item {
+        background-color: transparent ;
+        color: rgba(255, 255, 255, 0.8) ;
+        border-color: rgba(255, 255, 255, 0.1) ;
+    }
+    
+    .page-params .list-group-item.active {
+        background-color: var(--primary-color) ;
+        border-color: var(--primary-color) ;
+        color: white ;
+    }
+    
+    .page-params .list-group-item:hover:not(.active) {
+        background-color: rgba(255, 255, 255, 0.05) ;
+        color: white ;
+    }
+    
+    .page-params .form-control {
+        background-color: rgba(30, 30, 30, 0.9) ;
+        color: white ;
+        border-color: rgba(255, 255, 255, 0.2) ;
+    }
+    
+    .page-params .form-control:read-only {
+        background-color: rgba(40, 40, 40, 0.9) ;
+    }
+    
+    .page-params .form-label {
+        color: rgba(255, 255, 255, 0.9) ;
+    }
+    
+    .page-params .form-check-label {
+        color: rgba(255, 255, 255, 0.9) ;
+    }
+    
+    .page-params .alert-info {
+        background-color: rgba(56, 178, 172, 0.2) ;
+        border-color: rgba(56, 178, 172, 0.3) ;
+        color: #81e6d9 ;
+    }
+    
+    .page-params .alert-info i {
+        color: #81e6d9 ;
+    }
+    
+    .page-params body {
+        background-color: var(--dark-color) ;
+    }
+    
+    .page-params hr {
+        border-color: rgba(255, 255, 255, 0.1) ;
+    }
+    
+    .page-params .btn-outline-primary,
+    .page-params .btn-outline-danger {
+        color: var(--primary-color) ;
+        border-color: var(--primary-color);
+    }
+    
+    .page-params .btn-outline-danger {
+        color: var(--accent-color) ;
+        border-color: var(--accent-color);
+    }
+    
+    .page-params .btn-outline-primary:hover,
+    .page-params .btn-outline-danger:hover {
+        color: white ;
+    }
+</style>
+
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-3 mb-4">
@@ -18,12 +127,6 @@
                         </a>
                         <a href="{{ path('app_parametres') }}" class="list-group-item list-group-item-action border-0 active">
                             <i class="fas fa-cog me-2"></i>Paramètres
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0">
-                            <i class="fas fa-bell me-2"></i>Notifications
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0">
-                            <i class="fas fa-lock me-2"></i>Sécurité
                         </a>
                     </div>
                 </div>
@@ -51,25 +154,6 @@
                                 <i class="fas fa-edit me-2"></i>Modifier (bientôt disponible)
                             </button>
                         </div>
-                        <div class="col-md-6">
-                            <h5 class="mb-3">Préférences</h5>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="notifications" disabled>
-                                <label class="form-check-label" for="notifications">
-                                    Recevoir les notifications par email
-                                </label>
-                            </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="newsletter" disabled>
-                                <label class="form-check-label" for="newsletter">
-                                    S'abonner à la newsletter
-                                </label>
-                            </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="darkMode" checked disabled>
-                                <label class="form-check-label" for="darkMode">
-                                    Mode sombre activé
-                                </label>
                             </div>
                         </div>
                     </div>
@@ -94,4 +178,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('page-params');
+    });
+</script>
 {% endblock %}
