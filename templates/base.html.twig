@@ -24,10 +24,134 @@
         }
         
         body, 
-        body *:not(i):not(.btn):not(.badge):not(.alert):not(.form-control):not(.dropdown-menu) {
+        body *:not(i):not(.btn):not(.badge):not(.alert):not(.form-control):not(.dropdown-menu):not(.admin-container):not(.admin-form-container):not(.admin-container *):not(.admin-form-container *):not(footer):not(footer *):not(.card):not(.movie-card):not(.card *):not(.movie-card *) {
             color: var(--light-color) ;
         }
         
+        footer, footer *:not(i) {
+            color: var(--light-color) !important;
+        }
+
+        footer a {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        footer a:hover {
+            color: var(--primary-color) !important;
+        }
+
+        footer .text-muted {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        footer h5, 
+        footer h6 {
+            color: white !important;
+        }
+
+        .movie-card,
+        .movie-card *:not(.btn):not(.badge) {
+            color: white !important;
+        }
+
+        .card,
+        .card *:not(.btn):not(.badge):not(.alert) {
+            color: white !important;
+        }
+
+        .movie-card .badge,
+        .movie-card .text-muted,
+        .movie-card small,
+        .movie-card .genre {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        .movie-card h5,
+        .movie-card h6,
+        .card-title,
+        .card-header {
+            color: white !important;
+        }
+
+        .card-body {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        /* Exclure la page locations de la règle globale */
+.locations-page,
+.locations-page *:not(.btn):not(.badge):not(.alert):not(.form-control) {
+    color: #333 !important;
+}
+
+/* Spécifique pour les cartes dans locations */
+.locations-page .card {
+    color: #333 !important;
+    background-color: white !important;
+}
+
+.locations-page .card-header {
+    color: #333 !important;
+    background-color: #f8f9fa !important;
+}
+
+.locations-page .card-body {
+    color: #333 !important;
+}
+
+/* Pour les tables */
+.locations-page .table {
+    color: #333 !important;
+}
+
+.locations-page .table th {
+    color: #333 !important;
+    background-color: #f8f9fa !important;
+}
+
+.locations-page .table td {
+    color: #333 !important;
+}
+
+/* Pour les titres */
+.locations-page h1,
+.locations-page h2,
+.locations-page h3,
+.locations-page h4,
+.locations-page h5,
+.locations-page h6 {
+    color: #333 !important;
+}
+
+/* Pour les textes muted */
+.locations-page .text-muted {
+    color: #6c757d !important;
+}
+
+/* Pour les liens dans la page locations */
+.locations-page a {
+    color: #0d6efd !important;
+}
+
+.locations-page a:hover {
+    color: #0a58ca !important;
+}
+
+/* Pour les badges */
+.locations-page .badge {
+    color: white !important; /* Garder le texte des badges en blanc */
+}
+
+/* Pour les boutons */
+.locations-page .btn-outline-primary {
+    color: #0d6efd !important;
+    border-color: #0d6efd !important;
+}
+
+.locations-page .btn-outline-primary:hover {
+    color: white !important;
+    background-color: #0d6efd !important;
+}
+
         .text-muted {
             color: rgba(255, 255, 255, 0.7) ;
         }
@@ -700,8 +824,6 @@
                 badge.addEventListener('click', function(e) {
                     e.preventDefault();
                     const genreName = this.textContent.trim();
-                    
-                    // Redirection vers la page filtrée
                     window.location.href = `/films/genre/${encodeURIComponent(genreName)}`;
                 });
             });

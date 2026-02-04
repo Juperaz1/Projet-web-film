@@ -78,6 +78,42 @@
             }
         }
         
+        select[name="genre"],
+        .filters-section .form-select {
+            background-color: rgba(30, 30, 30, 0.9) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+        }
+
+        select[name="genre"] option,
+        .filters-section .form-select option {
+            background-color: rgba(30, 30, 30, 0.95) !important;
+            color: white !important;
+            padding: 8px 12px;
+        }
+
+        select[name="genre"]:focus,
+        .filters-section .form-select:focus {
+            background-color: rgba(40, 40, 40, 0.9) !important;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+            color: white !important;
+        }
+
+        select[name="genre"] option:checked,
+        select[name="genre"] option:selected,
+        .filters-section .form-select option:checked,
+        .filters-section .form-select option:selected {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+            font-weight: 600;
+        }
+
+        select[name="genre"]:disabled option,
+        .filters-section .form-select:disabled option {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+       
         .film-badge {
             position: absolute;
             top: 15px;
@@ -397,11 +433,7 @@
                 <input type="hidden" name="page" value="1">
                 <div class="col-md-6">
                     <div class="input-group">
-                        <input type="text" 
-                               class="form-control" 
-                               name="search" 
-                               placeholder="Rechercher un film..." 
-                               value="{{ searchTerm }}">
+                        <input type="text" class="form-control" name="search" placeholder="Rechercher un film..." value="{{ searchTerm }}">
                         <button class="btn btn-primary" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
